@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const userController = require('../controllers/userController');
+const postController = require('../controllers/postController');
 
 /* GET users listing. */
 router.get('/', function (req, res, next) {
@@ -14,28 +15,31 @@ router.post('/login', userController.login_post);
 
 router.post('/logout', userController.logout_post);
 
+// delete this later
+router.get('/testing', userController.testing);
+
 router.get('/:userId/dashboard');
 
 // post routes
 
-router.get(':userId/post');
+router.get('/post');
 
-router.get(':userId/post/:postId');
+router.get('/post/:postId');
 
-router.put(':userId/post/:postId');
+router.put('/post/:postId');
 
-router.delete(':userId/post/:postId');
+router.delete('/post/:postId');
 
-router.post(':userId/post/create');
+router.post('/post/create', postController.create_post);
 
 // comment routes
 
-router.get(':userId/post/:postId/comment')
+router.get('/post/:postId/comment')
 
-router.get(':userId/post/:postId/comment/:commentId');
+router.get('/post/:postId/comment/:commentId');
 
-router.delete(':userId/post/:postId/comment/:commentId');
+router.delete('/post/:postId/comment/:commentId');
 
-router.post(':userId/post/:postId/comment/create');
+router.post('/post/:postId/comment/create');
 
 module.exports = router;

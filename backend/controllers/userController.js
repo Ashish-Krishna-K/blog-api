@@ -13,23 +13,25 @@ passport.use(new LocalStrategy(
     passwordField: 'password'
   },
   (email, password, done) => {
-    User.findOne({ email: email }, (err, user) => {
-      if (err) {
-        console.log(18, 'here')
-        return done(err);
-      };
-      if (!user) {
-        console.log(22, 'here')
-        return done(null, false, { message: "Incorrect Username" });
-      };
-      bcrypt.compare(password, user.password, (err, result) => {
-        if (!result) {
-          console.log(27, 'here')
-          return done(null, false, { message: "Incorrect Password" });
-        }
-      })
-      return done(null, user);
-    })
+    User.findOne({ email: email })
+      .select('+password')
+      .exec((err, user) => {
+        if (err) {
+          console.log(18, 'here')
+          return done(err);
+        };
+        if (!user) {
+          console.log(22, 'here')
+          return done(null, false, { message: "Incorrect Username" });
+        };
+        bcrypt.compare(password, user.password, (err, result) => {
+          if (!result) {
+            console.log(27, 'here')
+            return done(null, false, { message: "Incorrect Password" });
+          }
+        })
+        return done(null, user);
+      });
   }
 ))
 
@@ -77,11 +79,9 @@ exports.signup_post = [
     })
     .withMessage('Passwords do not match'),
   (req, res, next) => {
-    console.log(req.body);
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      res.status(400).send(errors);
-      return;
+      return res.status(400).send(errors);
     };
     bcrypt.hash(req.body.password, 16, (err, hashedPswrd) => {
       if (err) {
@@ -95,7 +95,7 @@ exports.signup_post = [
         });
         newUser.save((err) => {
           if (err) {
-            // TODO handle errors
+            res.send(err)
           } else {
             res.sendStatus(201);
           };
@@ -137,3 +137,10 @@ exports.logout_post = (req, res, next) => {
 exports.dashboard_get = (req, res, next) => {
 
 };
+
+// delete this later
+exports.testing = (req, res, next) => {
+  User.find({}, (err, results) => {
+    res.json(results);
+  })
+}
