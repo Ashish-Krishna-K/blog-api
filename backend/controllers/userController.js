@@ -15,13 +15,16 @@ passport.use(new LocalStrategy(
   (email, password, done) => {
     User.findOne({ email: email }, (err, user) => {
       if (err) {
+        console.log(18, 'here')
         return done(err);
       };
       if (!user) {
+        console.log(22, 'here')
         return done(null, false, { message: "Incorrect Username" });
       };
       bcrypt.compare(password, user.password, (err, result) => {
         if (!result) {
+          console.log(27, 'here')
           return done(null, false, { message: "Incorrect Password" });
         }
       })
@@ -114,14 +117,21 @@ exports.login_post = (req, res, next) => {
       if (err) {
         res.send(err);
       }
-      const token = jwt.sign(user, process.env.TOKEN_SECRET);
-      return res.json({user, token});
+      user.password = "hidden"
+      const token = jwt.sign({ user }, process.env.TOKEN_SECRET);
+      return res.json({ user, token });
     });
-  })
+  })(req, res, next);
 }
 
 exports.logout_post = (req, res, next) => {
-
+  req.logout((err) => {
+    if (err) {
+      return res.send(err)
+    } else {
+      res.sendStatus(200);
+    }
+  })
 };
 
 exports.dashboard_get = (req, res, next) => {

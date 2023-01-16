@@ -8,13 +8,13 @@ router.get('/', function (req, res, next) {
   res.send('respond with a resource');
 });
 
-router.post('/signup',userController.signup_post);
+router.post('/signup', userController.signup_post);
 
-router.post('/login');
+router.post('/login', userController.login_post);
 
-router.post(':userId/logout');
+router.post('/logout', userController.logout_post);
 
-router.get(':userId/dashboard');
+router.get('/:userId/dashboard');
 
 // post routes
 
