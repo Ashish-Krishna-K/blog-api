@@ -22,13 +22,17 @@ router.get('/:userId/dashboard');
 
 // post routes
 
-router.get('/post');
+router.get('/post', postController.get_posts_list);
 
-router.get('/post/:postId');
+router.get('/post/:postId', postController.get_single_post);
 
-router.put('/post/:postId');
+router.put('/post/:postId', postController.edit_post);
 
-router.delete('/post/:postId');
+router.put('/post/:postId/publish', postController.publish_post);
+
+router.put('/post/:postId/unpublish', postController.unpublish_post);
+
+router.delete('/post/:postId', postController.delete_post);
 
 router.post('/post/create', postController.create_post);
 

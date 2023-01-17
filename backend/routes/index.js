@@ -1,5 +1,7 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
+
+const postController = require('../controllers/postController');
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
@@ -8,9 +10,9 @@ router.get('/', function (req, res, next) {
 
 // post routes
 
-router.get('/post');
+router.get('/post', postController.get_posts_list);
 
-router.get('/post/:postId');
+router.get('/post/:postId', postController.get_single_post);
 
 // comment routes
 
