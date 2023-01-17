@@ -39,7 +39,7 @@ router.post('/post/create', postController.create_post);
 
 // comment routes
 
-router.get('/post/:postId/comment', commentController.get_comment_list);
+router.get('/comment', commentController.get_comment_list);
 
 router.get('/post/:postId/comment/:commentId', commentController.get_comment);
 

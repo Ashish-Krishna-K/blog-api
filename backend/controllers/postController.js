@@ -142,12 +142,14 @@ exports.delete_post = [
       if (err) return res.send(err);
       if (post.comments.length !== 0) {
         post.comments.forEach(comment => {
-          //TODO implement delete comments feature
+          Comment.findByIdAndRemove(comment, (err) => {
+            if (err) return res.send(err);
+          })
         })
       };
       Post.findByIdAndRemove(req.params.postId, (err) => {
         if (err) return res.send(err);
-        res.sendStatus(204);
+        return res.sendStatus(204);
       })
     })
   }

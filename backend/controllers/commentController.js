@@ -18,12 +18,23 @@ passport.use(new JWTStrategy(
   }
 ));
 
-exports.get_comment_list = (req, res, next) => {
-
-};
+exports.get_comment_list = [
+  passport.authenticate('jwt', { session: false }),
+  (req, res, next) => {
+    Comment.find({})
+      .sort({ time_stamp: -1 })
+      .exec((err, commentsList) => {
+        if (err) return res.send(err);
+        return res.json(commentsList);
+      });
+  }
+];
 
 exports.get_comment = (req, res, next) => {
-
+  Comment.findById(req.params.commentId, (err, comment) => {
+    if (err) return res.send(err);
+    return res.json(comment);
+  })
 };
 
 exports.create_comment = [
@@ -59,8 +70,14 @@ exports.create_comment = [
       return res.sendStatus(201)
     })
   }
-]
+];
 
-exports.delete_comment = (req, res, next) => {
+exports.delete_comment = [
+  passport.authenticate('jwt', { session: false }),
+  (req, res, next) => {
+    Comment.findByIdAndRemove(req.params.commentId, (err) => {
+      return err ? res.send(err) : res.sendStatus(202);
+    })
+  }
+];
 
-}
