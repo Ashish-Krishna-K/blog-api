@@ -18,34 +18,53 @@ passport.use(new JWTStrategy(
 ));
 
 exports.get_posts_list = (req, res, next) => {
-  Post.find({ is_published: true })
-    .sort({ published_at: -1 })
-    .exec((err, postsList) => {
-      if (err) {
-        return res.send(err);
+  passport.authenticate('jwt', { session: false }, (err, user, info) => {
+    if (user) {
+      Post.find({})
+        .sort({ created_at: -1 })
+        .exec((err, postsList) => {
+          if (err) return res.send(err);
+          return res.json(postsList);
+        })
+    } else {
+      const requestFrom = req.originalUrl;
+      if (!requestFrom.match(/\/user/)) {
+        Post.find({ is_published: true })
+          .sort({ published_at: -1 })
+          .exec((err, postsList) => {
+            if (err) {
+              return res.send(err);
+            }
+            if (postsList.length === 0) {
+              return res.status(404).json("No posts available at this moment.")
+            }
+            return res.json(postsList);
+          })
+      } else {
+        res.sendStatus(401);
       }
-      if (postsList.length === 0) {
-        return res.status(404).json("No posts available at this moment.")
-      }
-      return res.json(postsList);
-    })
-};
+
+    }
+  })(req, res, next)
+}
 
 exports.get_single_post = (req, res, next) => {
   passport.authenticate('jwt', { session: false }, (err, user, info) => {
     if (err) return res.send(err);
-    Post.findById(req.params.postId, (err, result) => {
-      if (err) {
-        return res.send(err);
-      }
-      if (!result) {
-        return res.sendStatus(404);
-      }
-      if (!result.is_published && !user) {
-        return res.sendStatus(401)
-      }
-      return res.json(result);
-    });
+    Post.findById(req.params.postId)
+      .populate("comments")
+      .exec((err, result) => {
+        if (err) {
+          return res.send(err);
+        }
+        if (!result) {
+          return res.sendStatus(404);
+        }
+        if (!result.is_published && !user) {
+          return res.sendStatus(401)
+        }
+        return res.json(result);
+      })
   })(req, res, next);
 };
 
@@ -115,9 +134,23 @@ exports.edit_post = [
   }
 ]
 
-exports.delete_post = (req, res, next) => {
-  
-};
+exports.delete_post = [
+  passport.authenticate('jwt', { session: false }),
+  (req, res, next) => {
+    Post.findById(req.params.postId, (err, post) => {
+      if (err) return res.send(err);
+      if (post.comments.length !== 0) {
+        post.comments.forEach(comment => {
+          //TODO implement delete comments feature
+        })
+      };
+      Post.findByIdAndRemove(req.params.postId, (err) => {
+        if (err) return res.send(err);
+        res.sendStatus(204);
+      })
+    })
+  }
+]
 
 exports.publish_post = [
   passport.authenticate('jwt', { session: false }),
