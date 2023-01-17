@@ -6,6 +6,7 @@ const JWTStrategy = passportJWT.Strategy;
 const ExtractJWT = passportJWT.ExtractJwt;
 
 const Post = require('../models/postModel');
+const Comment = require('../models/commentModel');
 
 passport.use(new JWTStrategy(
   {
@@ -51,20 +52,18 @@ exports.get_posts_list = (req, res, next) => {
 exports.get_single_post = (req, res, next) => {
   passport.authenticate('jwt', { session: false }, (err, user, info) => {
     if (err) return res.send(err);
-    Post.findById(req.params.postId)
-      .populate("comments")
-      .exec((err, result) => {
-        if (err) {
-          return res.send(err);
-        }
-        if (!result) {
-          return res.sendStatus(404);
-        }
-        if (!result.is_published && !user) {
-          return res.sendStatus(401)
-        }
-        return res.json(result);
-      })
+    Post.findById(req.params.postId, (err, result) => {
+      if (err) {
+        return res.send(err);
+      }
+      if (!result) {
+        return res.sendStatus(404);
+      }
+      if (!result.is_published && !user) {
+        return res.sendStatus(401)
+      }
+      return res.json(result);
+    })
   })(req, res, next);
 };
 
@@ -72,10 +71,12 @@ exports.create_post = [
   body("title")
     .trim()
     .isLength({ min: 1 })
+    .withMessage("Title is required")
     .escape(),
   body("content")
     .trim()
     .isLength({ min: 1 })
+    .withMessage("Content is required")
     .escape(),
   passport.authenticate('jwt', { session: false }),
   (req, res, next) => {

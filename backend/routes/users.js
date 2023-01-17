@@ -3,6 +3,7 @@ const router = express.Router();
 
 const userController = require('../controllers/userController');
 const postController = require('../controllers/postController');
+const commentController = require('../controllers/commentController');
 
 /* GET users listing. */
 router.get('/', function (req, res, next) {
@@ -38,12 +39,12 @@ router.post('/post/create', postController.create_post);
 
 // comment routes
 
-router.get('/post/:postId/comment')
+router.get('/post/:postId/comment', commentController.get_comment_list);
 
-router.get('/post/:postId/comment/:commentId');
+router.get('/post/:postId/comment/:commentId', commentController.get_comment);
 
-router.delete('/post/:postId/comment/:commentId');
+router.delete('/post/:postId/comment/:commentId', commentController.delete_comment);
 
-router.post('/post/:postId/comment/create');
+router.post('/post/:postId/comment/create', commentController.create_comment);
 
 module.exports = router;
