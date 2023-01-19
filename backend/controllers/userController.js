@@ -81,11 +81,11 @@ exports.signup_post = [
   (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).send(errors);
+      return res.status(400).json(errors);
     };
     bcrypt.hash(req.body.password, 16, (err, hashedPswrd) => {
       if (err) {
-        //TODO handle errors
+        return res.status(500).json(err);
       } else {
         const newUser = new User({
           username: req.body.username,
@@ -95,7 +95,7 @@ exports.signup_post = [
         });
         newUser.save((err) => {
           if (err) {
-            res.send(err)
+            return res.status(500).json(err);
           } else {
             res.sendStatus(201);
           };
