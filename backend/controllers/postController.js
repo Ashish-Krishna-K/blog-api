@@ -24,7 +24,7 @@ exports.get_posts_list = (req, res, next) => {
       Post.find({})
         .sort({ created_at: -1 })
         .exec((err, postsList) => {
-          if (err) return res.json({ status: 400, message: err });
+          if (err) return res.status(400).json({ message: err });
           return res.json(postsList);
         })
     } else {
@@ -34,14 +34,12 @@ exports.get_posts_list = (req, res, next) => {
           .sort({ published_at: -1 })
           .exec((err, postsList) => {
             if (err) {
-              return res.json({
-                status: 400,
+              return res.status(400).json({
                 message: err,
               });
             }
             if (postsList.length === 0) {
-              return res.json({
-                status: 400,
+              return res.status(400).json({
                 message: "No Posts available at this moment",
               });
             }
@@ -60,10 +58,9 @@ exports.get_single_post = (req, res, next) => {
     if (err) return res.json({ status: 400, message: err, });
     Post.findById(req.params.postId, (err, result) => {
       if (err) {
-        return res.json({
-          status: 400,
+        return res.status(400).json({
           message: err,
-        });;
+        });
       }
       if (!result) {
         return res.sendStatus(404);
@@ -91,10 +88,9 @@ exports.create_post = [
   (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.json({
-        status: 400,
+      return res.status(400).json({
         message: err,
-      });;
+      });
     };
     const newPost = new Post({
       written_by: req.body.authorId,
@@ -107,8 +103,7 @@ exports.create_post = [
     });
     newPost.save((err) => {
       if (err) {
-        res.json({
-          status: 400,
+        return res.status(400).json({
           message: err,
         });
       } else {
@@ -131,15 +126,13 @@ exports.edit_post = [
   (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.json({
-        status: 400,
+      return res.status(400).json({
         message: err,
       });
     };
     Post.findById(req.params.postId, (err, post) => {
       if (err) {
-        return res.json({
-          status: 400,
+        return res.status(400).json({
           message: err,
         });
       };
@@ -147,8 +140,7 @@ exports.edit_post = [
       post.content = req.body.content;
       post.save((err, updatedPost) => {
         if (err) {
-          return res.json({
-            status: 400,
+          return res.status(400).json({
             message: err,
           });
         };
@@ -166,18 +158,20 @@ exports.delete_post = [
       if (post.comments.length !== 0) {
         post.comments.forEach(comment => {
           Comment.findByIdAndRemove(comment, (err) => {
-            if (err) return res.json({
-              status: 400,
-              message: err,
-            });
+            if (err) {
+              return res.status(400).json({
+                message: err,
+              });
+            }
           })
         })
       };
       Post.findByIdAndRemove(req.params.postId, (err) => {
-        if (err) return res.json({
-          status: 400,
-          message: err,
-        });
+        if (err) {
+          return res.status(400).json({
+            message: err,
+          });
+        }
         return res.sendStatus(204);
       })
     })
@@ -189,8 +183,7 @@ exports.publish_post = [
   (req, res, next) => {
     Post.findById(req.params.postId, (err, post) => {
       if (err) {
-        return res.json({
-          status: 400,
+        return res.status(400).json({
           message: err,
         });
       };
@@ -198,8 +191,7 @@ exports.publish_post = [
       post.published_at = Date.now();
       post.save((err, updatedPost) => {
         if (err) {
-          return res.json({
-            status: 400,
+          return res.status(400).json({
             message: err,
           });
         };
@@ -214,16 +206,14 @@ exports.unpublish_post = [
   (req, res, next) => {
     Post.findById(req.params.postId, (err, post) => {
       if (err) {
-        return res.json({
-          status: 400,
+        return res.status(400).json({
           message: err,
         });
       };
       post.is_published = false;
       post.save((err, updatedPost) => {
         if (err) {
-          return res.json({
-            status: 400,
+          return res.status(400).json({
             message: err,
           });
         };

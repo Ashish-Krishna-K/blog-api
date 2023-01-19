@@ -20,7 +20,6 @@ passport.use(new LocalStrategy(
           return done(err);
         };
         if (!user) {
-          console.log(22, 'here')
           return done(null, false, { message: "Incorrect Username" });
         };
         bcrypt.compare(password, user.password, (err, result) => {
@@ -52,7 +51,7 @@ exports.signup_post = [
             throw new Error(err)
           };
           if (user) {
-            return "Email already in use"
+            throw new Error("Email already in use")
           };
         });
       return true;
@@ -79,15 +78,11 @@ exports.signup_post = [
   (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.json({
-        status: 400,
-        message: errors
-      });
+      return res.status(400).json({ message: errors });
     };
     bcrypt.hash(req.body.password, 16, (err, hashedPswrd) => {
       if (err) {
-        return res.json({
-          status: 500,
+        return res.status(400).json({
           message: err
         });
       } else {
@@ -99,8 +94,7 @@ exports.signup_post = [
         });
         newUser.save((err) => {
           if (err) {
-            return res.json({
-              status: 500,
+            return res.status(400).json({
               message: err,
             });
           } else {
@@ -122,8 +116,7 @@ exports.login_post = (req, res, next) => {
     }
     req.login(user, { session: false }, (err) => {
       if (err) {
-        return res.json({
-          status: 400,
+        return res.status(400).json({
           message: err
         });
       }
@@ -137,8 +130,7 @@ exports.login_post = (req, res, next) => {
 exports.logout_post = (req, res, next) => {
   req.logout((err) => {
     if (err) {
-      return res.json({
-        status: 400,
+      return res.status(400).json({
         message: err
       });
     } else {
