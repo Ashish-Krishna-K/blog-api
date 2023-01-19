@@ -16,9 +16,6 @@ router.post('/login', userController.login_post);
 
 router.post('/logout', userController.logout_post);
 
-// delete this later
-router.get('/testing', userController.testing);
-
 router.get('/:userId/dashboard');
 
 // post routes
