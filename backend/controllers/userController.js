@@ -17,7 +17,6 @@ passport.use(new LocalStrategy(
       .select('+password')
       .exec((err, user) => {
         if (err) {
-          console.log(18, 'here')
           return done(err);
         };
         if (!user) {
@@ -26,7 +25,6 @@ passport.use(new LocalStrategy(
         };
         bcrypt.compare(password, user.password, (err, result) => {
           if (!result) {
-            console.log(27, 'here')
             return done(null, false, { message: "Incorrect Password" });
           }
         })
@@ -51,7 +49,7 @@ exports.signup_post = [
       User.find({ email: value })
         .exec((err, user) => {
           if (err) {
-            return err;
+            throw new Error(err)
           };
           if (user) {
             return "Email already in use"
@@ -81,11 +79,17 @@ exports.signup_post = [
   (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json(errors);
+      return res.json({
+        status: 400,
+        message: errors
+      });
     };
     bcrypt.hash(req.body.password, 16, (err, hashedPswrd) => {
       if (err) {
-        return res.status(500).json(err);
+        return res.json({
+          status: 500,
+          message: err
+        });
       } else {
         const newUser = new User({
           username: req.body.username,
@@ -95,7 +99,10 @@ exports.signup_post = [
         });
         newUser.save((err) => {
           if (err) {
-            return res.status(500).json(err);
+            return res.json({
+              status: 500,
+              message: err,
+            });
           } else {
             res.sendStatus(201);
           };
@@ -115,7 +122,10 @@ exports.login_post = (req, res, next) => {
     }
     req.login(user, { session: false }, (err) => {
       if (err) {
-        res.send(err);
+        return res.json({
+          status: 400,
+          message: err
+        });
       }
       user.password = "hidden"
       const token = jwt.sign({ user }, process.env.TOKEN_SECRET);
@@ -127,20 +137,12 @@ exports.login_post = (req, res, next) => {
 exports.logout_post = (req, res, next) => {
   req.logout((err) => {
     if (err) {
-      return res.send(err)
+      return res.json({
+        status: 400,
+        message: err
+      });
     } else {
       res.sendStatus(200);
     }
   })
 };
-
-exports.dashboard_get = (req, res, next) => {
-
-};
-
-// delete this later
-exports.testing = (req, res, next) => {
-  User.find({}, (err, results) => {
-    res.json(results);
-  })
-}

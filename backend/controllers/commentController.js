@@ -24,7 +24,10 @@ exports.get_comment_list = [
     Comment.find({})
       .sort({ time_stamp: -1 })
       .exec((err, commentsList) => {
-        if (err) return res.send(err);
+        if (err) return res.json({
+          status: 400,
+          message: err,
+        });
         return res.json(commentsList);
       });
   }
@@ -32,7 +35,10 @@ exports.get_comment_list = [
 
 exports.get_comment = (req, res, next) => {
   Comment.findById(req.params.commentId, (err, comment) => {
-    if (err) return res.send(err);
+    if (err) return res.json({
+      status: 400,
+      message: err,
+    });
     return res.json(comment);
   })
 };
@@ -51,7 +57,10 @@ exports.create_comment = [
   (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).send(errors);
+      return res.json({
+        status: 400,
+        message: errors,
+      });
     };
     const newComment = new Comment({
       created_by: req.body.author,
@@ -64,7 +73,10 @@ exports.create_comment = [
       Post.findById(req.params.postId, (err, post) => {
         post.comments.push(commentDoc._id);
         post.save((err) => {
-          if (err) return res.send(err);
+          if (err) return res.json({
+            status: 400,
+            message: err,
+          });
         });
       });
       return res.sendStatus(201)
@@ -76,7 +88,10 @@ exports.delete_comment = [
   passport.authenticate('jwt', { session: false }),
   (req, res, next) => {
     Comment.findByIdAndRemove(req.params.commentId, (err) => {
-      return err ? res.send(err) : res.sendStatus(202);
+      return err ? res.json({
+        status: 400,
+        message: err,
+      }) : res.sendStatus(202);
     })
   }
 ];
