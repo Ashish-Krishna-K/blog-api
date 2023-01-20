@@ -24,10 +24,11 @@ passport.use(new LocalStrategy(
         };
         bcrypt.compare(password, user.password, (err, result) => {
           if (!result) {
+            console.log(result);
             return done(null, false, { message: "Incorrect Password" });
           }
+          return done(null, user);
         })
-        return done(null, user);
       });
   }
 ))
@@ -109,10 +110,14 @@ exports.signup_post = [
 
 exports.login_post = (req, res, next) => {
   passport.authenticate('local', { session: false }, (err, user, info) => {
-    if (err || !user) {
+    if (err) {
       return res.status(400).json({
         message: "An Error occured",
-        user
+      });
+    };
+    if (!user) {
+      return res.status(400).json({
+        message: info,
       });
     }
     req.login(user, { session: false }, (err) => {
