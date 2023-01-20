@@ -89,7 +89,7 @@ exports.create_post = [
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({
-        message: err,
+        message: errors,
       });
     };
     const newPost = new Post({
