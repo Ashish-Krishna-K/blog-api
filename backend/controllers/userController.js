@@ -48,14 +48,15 @@ exports.signup_post = [
       User.find({ email: value })
         .exec((err, user) => {
           if (err) {
-            throw new Error(err)
+            return err
           };
           if (user) {
-            throw new Error("Email already in use")
+            return ("Email already in use")
           };
         });
       return true;
-    }),
+    })
+    .withMessage("Email already in use"),
   body("password")
     .isLength({ min: 1 })
     .withMessage("Password is required")
@@ -70,7 +71,7 @@ exports.signup_post = [
   body("confirm_password")
     .custom((value, { req }) => {
       if (value !== req.body.password) {
-        throw new Error("Passwords do not match")
+        return ("Passwords do not match")
       }
       return true;
     })
