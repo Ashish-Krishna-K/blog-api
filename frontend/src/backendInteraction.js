@@ -3,7 +3,15 @@ import axios from "axios";
 const baseUrl = 'https://blog-api-u2hp.onrender.com';
 
 const getAuthTokenFromLocalStorage = () => {
-  return JSON.stringify(localStorage.getItem('AUTH_TOKEN'));
+  const token = localStorage.getItem('AUTH_TOKEN');
+  return token ? JSON.stringify(token) : null;
+}
+
+const saveAuthTokenToLocalStorage = (token) => {
+  const newToken = 'Bearer ' + token;
+  const jsonToken = JSON.stringify(newToken);
+  localStorage.setItem('AUTH_TOKEN', jsonToken);
+  return jsonToken;
 }
 
 const clientAxios = axios.create({
@@ -19,5 +27,7 @@ const cmsAxios = axios.create({
 
 export {
   clientAxios,
-  cmsAxios
+  cmsAxios,
+  getAuthTokenFromLocalStorage,
+  saveAuthTokenToLocalStorage
 }

@@ -18,7 +18,3 @@ export default function App() {
     </div>
   );
 }
-
-export const loader = () => {
-  return localStorage.getItem('AUTH_TOKEN');
-}

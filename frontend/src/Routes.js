@@ -2,7 +2,7 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
-import App, { loader as tokenLoader } from "./App";
+import App from "./App";
 import CMSEntry from "./components/CMS/EntryPage";
 import Login from "./components/CMS/LoginPage";
 import SignUp from "./components/CMS/SignupPage";
@@ -24,7 +24,6 @@ const router = createBrowserRouter([
         path: "/cms",
         element: <CMSEntry />,
         errorElement: <ErrorPage />,
-        loader: tokenLoader,
         children: [
           {
             path: "/cms/signup",

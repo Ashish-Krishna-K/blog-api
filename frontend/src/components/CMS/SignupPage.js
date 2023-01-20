@@ -7,9 +7,19 @@ export default function SignUp() {
   const [emailField, setEmailField] = useState({ text: '' });
   const [passwordField, setPasswordField] = useState({ text: '' });
   const [confirmPasswordField, setConfirmPasswordField] = useState({ text: '' });
-  const [formData, setFormData] = useState({});
   const [status, setStatus] = useState({ loading: false, code: null });
-  const [responseErrors, setResponseErrors] = useState([])
+  const [responseErrors, setResponseErrors] = useState([]);
+
+  const submitFormToServer = async (data) => {
+    try {
+      const response = await cmsAxios.post('/user/signup', data);
+      setStatus({ loading: false, code: response.status });
+    } catch (error) {
+      setStatus({ loading: false, code: error.response.status });
+      const errors = error.response.data.message.errors;
+      setResponseErrors(errors);
+    }
+  };
 
   const handleUsernameInput = (e) => {
     setUsernameField({
@@ -40,26 +50,8 @@ export default function SignUp() {
       password: passwordField.text,
       confirm_password: confirmPasswordField.text,
     }
-    setFormData(formData);
+    submitFormToServer(formData);
   };
-
-  useEffect(() => {
-    if (!formData.username) {
-      return;
-    }
-    (async () => {
-      try {
-        const response = await cmsAxios.post('/user/signup', formData);
-        setStatus({ loading: false, code: response.status });
-        setFormData({});
-      } catch (error) {
-        setStatus({ loading: false, code: error.response.status });
-        setFormData({});
-        const errors = error.response.data.message.errors;
-        setResponseErrors(errors);
-      }
-    })()
-  }, [formData])
 
   return (
     <section>
@@ -76,7 +68,7 @@ export default function SignUp() {
               <>
                 {
                   <>
-                    <form method="post" id="signup-form" onSubmit={handleFormSubmit}>
+                    <form id="signup-form" onSubmit={handleFormSubmit}>
                       <label htmlFor="username">Name*: </label>
                       <input
                         id="username"

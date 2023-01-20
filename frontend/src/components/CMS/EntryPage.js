@@ -1,8 +1,13 @@
-import { useState } from "react";
-import { Link, Outlet, useLoaderData } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, Outlet } from "react-router-dom";
+import { getAuthTokenFromLocalStorage } from "../../backendInteraction";
 
 export default function CMSEntry() {
-  const authToken = useLoaderData();
+  const [authToken, setAuthToken] = useState(null);
+
+  useEffect(() => {
+    setAuthToken(getAuthTokenFromLocalStorage());
+  }, [authToken])
 
   return (
     <section>
@@ -14,8 +19,7 @@ export default function CMSEntry() {
             <Link to={`/cms/signup`}>SignUp</Link>
             <Outlet />
           </>
-          :
-          <></>
+          : <p>hi user</p>
       }
     </section>
   )
