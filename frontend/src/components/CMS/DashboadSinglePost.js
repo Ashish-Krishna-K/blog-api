@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom"
+import { Link, useParams } from "react-router-dom"
 import { cmsAxios } from "../../backendInteraction";
 import AddComment from "../AddComment";
 import Comment from "../ViewComment";
@@ -36,6 +36,7 @@ export default function DashboardSinglePost() {
                   <>
                     <h3>{post.title}</h3>
                     <p>{post.content}</p>
+                    <Link to={`/cms_dashboard/posts/${post._id}/edit_post`}>Edit this post</Link>
                   </>
               }
             </div>

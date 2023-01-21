@@ -1,22 +1,33 @@
-import { useState } from "react"
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react"
+import { useNavigate, useParams } from "react-router-dom";
 import { cmsAxios } from "../../backendInteraction";
 
-export default function CreatePost() {
+export default function EditPost() {
+  const { postId } = useParams();
+  const navigate = useNavigate();
+
   const [titleInput, setTitleInput] = useState({ text: '' });
   const [contentInput, setContentInput] = useState({ text: '' });
   const [formErrors, setFormErrors] = useState([]);
   const [otherErrors, setOtherErrors] = useState(null);
-  const navigate = useNavigate();
+
+  const getPostFromServer = async (id) => {
+    try {
+      const response = await cmsAxios.get(`/user/post/${id}`);
+      console.log(response.data);
+      setTitleInput({ text: response.data.title });
+      setContentInput({ text: response.data.content })
+    } catch (error) {
+      setOtherErrors(error.response.data.message);
+    }
+  }
 
   const submitFormToServer = async (data) => {
     try {
-      const response = await cmsAxios.post('/user/post/create', data);
-      if (response.status === 201) {
-        setFormErrors([]);
-        setOtherErrors(null);
-        navigate('/cms_dashboard/posts');
-      }
+      const response = await cmsAxios.put(`/user/post/${postId}`, data);
+      setFormErrors([]);
+      setOtherErrors(null);
+      navigate('/cms_dashboard/posts');
     } catch (error) {
       if (error.response.status === 400) {
         const errors = error.response.data.message;
@@ -26,6 +37,10 @@ export default function CreatePost() {
       }
     }
   }
+
+  useEffect(() => {
+    getPostFromServer(postId);
+  }, [postId])
 
   const handleTitleInput = (e) => {
     setTitleInput({
@@ -45,7 +60,6 @@ export default function CreatePost() {
     }
     submitFormToServer(formData);
   }
-
   return (
     <>
       <form id="create-post-form" onSubmit={handleFormSubmit}>

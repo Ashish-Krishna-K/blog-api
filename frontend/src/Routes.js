@@ -13,6 +13,7 @@ import DashboardPosts from "./components/CMS/DashboardPosts";
 import DashboardSinglePost from "./components/CMS/DashboadSinglePost";
 import Home from "./components/HomePage";
 import ErrorPage from './ErrorPage';
+import EditPost from "./components/CMS/EditPost";
 
 const router = createBrowserRouter([
   {
@@ -60,6 +61,11 @@ const router = createBrowserRouter([
           {
             path: "/cms_dashboard/create_post",
             element: <CreatePost />,
+            errorElement: <ErrorPage />
+          },
+          {
+            path: "/cms_dashboard/posts/:postId/edit_post",
+            element: <EditPost />,
             errorElement: <ErrorPage />
           },
           {

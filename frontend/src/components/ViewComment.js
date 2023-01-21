@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { clientAxios } from "../backendInteraction";
 
 export default function Comment({ postId, commentId }) {
@@ -12,7 +12,9 @@ export default function Comment({ postId, commentId }) {
       console.log(error.response);
     }
   }
-  getCommentFromServer();
+  useEffect(() => {
+    getCommentFromServer();
+  }, [postId, commentId])
 
   return (
     <p>

@@ -28,18 +28,31 @@ export default function DashboardComments() {
 
   useEffect(() => {
     getCommentsListFromServer();
-  }, [])
+  }, []);
+
+  const handleDeleteComment = (e) => {
+    const postId = e.target.dataset.postid;
+    const commentId = e.target.value;
+    deleteCommentToServer(postId, commentId);
+  }
 
   return (
     <>
       {
         errors ? <p>{errors}</p> :
           comments.length === 0 ? <p>No Comments available</p> :
-            comments.map(comment => {
-              return (
-                <></>
-              )
-            })
+            <ul>
+              {
+                comments.map(comment => {
+                  return (
+                    <li key={comment._id}>
+                      <p>{comment.comment_content}</p>
+                      <button data-postid={comment.parent_post} value={comment._id} onClick={handleDeleteComment}>Delete this comment</button>
+                    </li>
+                  )
+                })
+              }
+            </ul>
       }
     </>
   )
