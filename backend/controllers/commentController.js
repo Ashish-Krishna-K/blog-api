@@ -1,4 +1,3 @@
-const express = require('express');
 const { body, validationResult } = require('express-validator');
 const passport = require('passport');
 const passportJWT = require("passport-jwt");
@@ -25,7 +24,7 @@ exports.get_comment_list = [
       .sort({ time_stamp: -1 })
       .exec((err, commentsList) => {
         if (err) {
-          return res.status(400).json({
+          return res.status(500).json({
             message: err,
           });
         }
@@ -37,7 +36,7 @@ exports.get_comment_list = [
 exports.get_comment = (req, res, next) => {
   Comment.findById(req.params.commentId, (err, comment) => {
     if (err) {
-      return res.status(400).json({
+      return res.status(500).json({
         message: err,
       });
     }
@@ -70,12 +69,15 @@ exports.create_comment = [
       parent_post: req.params.postId
     });
     newComment.save((err, commentDoc) => {
-      if (err) return res.send(err);
+      if (err) return res.status(500).json({ message: err });
       Post.findById(req.params.postId, (err, post) => {
+        if (err) {
+          return res.status(500).json({ message: err });
+        }
         post.comments.push(commentDoc._id);
         post.save((err) => {
           if (err) {
-            return res.status(400).json({
+            return res.status(500).json({
               message: err,
             });
           }
@@ -90,9 +92,27 @@ exports.delete_comment = [
   passport.authenticate('jwt', { session: false }),
   (req, res, next) => {
     Comment.findByIdAndRemove(req.params.commentId, (err) => {
-      return err ? res.status(400).json({
-        message: err,
-      }) : res.sendStatus(202);
+      if (err) {
+        return res.status(500).json({
+          message: err
+        });
+      } else {
+        Post.findById(req.params.postId, (err, post) => {
+          if (err) {
+            return res.status(500).json({ message: err })
+          }
+          const newCommentsArray = post.comments.filter(comment => comment._id.toString() !== req.params.commentId);
+          post.comments = newCommentsArray;
+          post.save((err) => {
+            if (err) {
+              return res.status(500).json({ message: err })
+            } else {
+              return res.sendStatus(202)
+            }
+          })
+        })
+      }
+
     })
   }
 ];

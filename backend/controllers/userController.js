@@ -1,4 +1,3 @@
-const express = require('express');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const jwt = require('jsonwebtoken');
@@ -84,7 +83,7 @@ exports.signup_post = [
     };
     bcrypt.hash(req.body.password, 16, (err, hashedPswrd) => {
       if (err) {
-        return res.status(400).json({
+        return res.status(500).json({
           message: err
         });
       } else {
@@ -96,7 +95,7 @@ exports.signup_post = [
         });
         newUser.save((err) => {
           if (err) {
-            return res.status(400).json({
+            return res.status(500).json({
               message: err,
             });
           } else {
@@ -111,18 +110,18 @@ exports.signup_post = [
 exports.login_post = (req, res, next) => {
   passport.authenticate('local', { session: false }, (err, user, info) => {
     if (err) {
-      return res.status(400).json({
-        message: "An Error occured",
+      return res.status(500).json({
+        message: err,
       });
     };
     if (!user) {
-      return res.status(400).json({
+      return res.status(403).json({
         message: info,
       });
     }
     req.login(user, { session: false }, (err) => {
       if (err) {
-        return res.status(400).json({
+        return res.status(500).json({
           message: err
         });
       }
@@ -136,7 +135,7 @@ exports.login_post = (req, res, next) => {
 exports.logout_post = (req, res, next) => {
   req.logout((err) => {
     if (err) {
-      return res.status(400).json({
+      return res.status(500).json({
         message: err
       });
     } else {

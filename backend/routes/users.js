@@ -5,18 +5,11 @@ const userController = require('../controllers/userController');
 const postController = require('../controllers/postController');
 const commentController = require('../controllers/commentController');
 
-/* GET users listing. */
-router.get('/', function (req, res, next) {
-  res.send('respond with a resource');
-});
-
 router.post('/signup', userController.signup_post);
 
 router.post('/login', userController.login_post);
 
 router.post('/logout', userController.logout_post);
-
-router.get('/:userId/dashboard');
 
 // post routes
 
