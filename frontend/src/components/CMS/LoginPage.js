@@ -16,7 +16,7 @@ export default function Login() {
       setStatus({ loading: false, code: response.status });
       setResponseErrors({});
       saveAuthTokenToLocalStorage(response.data.token);
-      navigate('/cms');
+      navigate('/cms_dashboard/posts');
       window.location.reload();
     } catch (error) {
       setStatus({ loading: false, code: error.response.status });

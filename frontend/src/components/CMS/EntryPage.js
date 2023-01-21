@@ -1,25 +1,28 @@
 import { useEffect, useState } from "react";
-import { Link, Outlet } from "react-router-dom";
+import { Link, Navigate, Outlet } from "react-router-dom";
 import { getAuthTokenFromLocalStorage } from "../../backendInteraction";
 
 export default function CMSEntry() {
-  const [authToken, setAuthToken] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    setAuthToken(getAuthTokenFromLocalStorage());
-  }, [authToken])
+    const token = getAuthTokenFromLocalStorage();
+    if (token) {
+      setIsLoggedIn(true);
+    }
+  }, [])
 
   return (
     <section>
       {
-        !authToken ?
+        !isLoggedIn ?
           <>
             <h2>Login</h2>
             <Link to={`/cms/login`}>Login</Link>
             <Link to={`/cms/signup`}>SignUp</Link>
             <Outlet />
           </>
-          : <p>hi user</p>
+          : <Navigate replace to="/cms_dashboard/posts" />
       }
     </section>
   )

@@ -4,14 +4,13 @@ const baseUrl = 'https://blog-api-u2hp.onrender.com';
 
 const getAuthTokenFromLocalStorage = () => {
   const token = localStorage.getItem('AUTH_TOKEN');
-  return token ? JSON.stringify(token) : null;
+  return token || null;
 }
 
 const saveAuthTokenToLocalStorage = (token) => {
   const newToken = 'Bearer ' + token;
-  const jsonToken = JSON.stringify(newToken);
-  localStorage.setItem('AUTH_TOKEN', jsonToken);
-  return jsonToken;
+  localStorage.setItem('AUTH_TOKEN', newToken);
+  return newToken;
 }
 
 const clientAxios = axios.create({
