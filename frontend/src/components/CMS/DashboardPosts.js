@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import { cmsAxios } from "../../backendInteraction"
+import { Link } from "react-router-dom";
 
 export default function DashboardPosts() {
   const [posts, setPosts] = useState([]);
@@ -65,10 +66,10 @@ export default function DashboardPosts() {
     <>
       {
         errors ? <p>{errors}</p> :
-          posts.length === 0 ? <p>Loading...</p> : posts.map(post => {
+          posts.length === 0 ? <p>No Posts available</p> : posts.map(post => {
             return (
               <div key={post._id}>
-                <span>{post.title}</span>
+                <Link to={`/cms_dashboard/posts/${post._id}`}>{post.title}</Link>
                 {
                   post.is_published ?
                     <button

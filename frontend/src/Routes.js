@@ -10,6 +10,7 @@ import Login from "./components/CMS/LoginPage";
 import SignUp from "./components/CMS/SignupPage";
 import DashboardComments from "./components/CMS/DashboardComments";
 import DashboardPosts from "./components/CMS/DashboardPosts";
+import DashboardSinglePost from "./components/CMS/DashboadSinglePost";
 import Home from "./components/HomePage";
 import ErrorPage from './ErrorPage';
 
@@ -61,6 +62,11 @@ const router = createBrowserRouter([
             element: <CreatePost />,
             errorElement: <ErrorPage />
           },
+          {
+            path: "/cms_dashboard/posts/:postId",
+            element: <DashboardSinglePost />,
+            errorElement: <ErrorPage />,
+          }
         ]
       }
     ]
