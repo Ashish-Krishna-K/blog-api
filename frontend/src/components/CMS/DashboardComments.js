@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { cmsAxios } from "../../backendInteraction"
+import { cmsAxios } from "../../helperModule"
 
 
 export default function DashboardComments() {
@@ -9,7 +9,6 @@ export default function DashboardComments() {
   const getCommentsListFromServer = async () => {
     try {
       const response = await cmsAxios.get('/user/comment');
-      console.log(response.data);
       setComments(response.data);
     } catch (error) {
       setErrors(error.response.data.message);

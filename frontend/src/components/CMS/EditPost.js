@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom";
-import { cmsAxios } from "../../backendInteraction";
+import { cmsAxios } from "../../helperModule";
 
 export default function EditPost() {
   const { postId } = useParams();
@@ -14,7 +14,6 @@ export default function EditPost() {
   const getPostFromServer = async (id) => {
     try {
       const response = await cmsAxios.get(`/user/post/${id}`);
-      console.log(response.data);
       setTitleInput({ text: response.data.title });
       setContentInput({ text: response.data.content })
     } catch (error) {

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { cmsAxios, saveAuthTokenToLocalStorage } from "../../backendInteraction";
+import { cmsAxios, saveAuthTokenToLocalStorage } from "../../helperModule";
 
 
 export default function Login() {

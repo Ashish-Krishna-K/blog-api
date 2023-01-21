@@ -1,4 +1,5 @@
 import axios from "axios";
+import { format, parseISO } from "date-fns";
 
 const baseUrl = 'https://blog-api-u2hp.onrender.com';
 
@@ -24,9 +25,15 @@ const cmsAxios = axios.create({
   }
 })
 
+const formatDates = (serverDate) => {
+  if (!serverDate) return;
+  return format(parseISO(serverDate), 'PPPp')
+}
+
 export {
   clientAxios,
   cmsAxios,
   getAuthTokenFromLocalStorage,
-  saveAuthTokenToLocalStorage
+  saveAuthTokenToLocalStorage,
+  formatDates
 }

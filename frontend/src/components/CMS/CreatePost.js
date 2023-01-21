@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom";
-import { cmsAxios } from "../../backendInteraction";
+import { cmsAxios } from "../../helperModule";
 
 export default function CreatePost() {
   const [titleInput, setTitleInput] = useState({ text: '' });

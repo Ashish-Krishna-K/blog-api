@@ -14,6 +14,7 @@ import DashboardSinglePost from "./components/CMS/DashboadSinglePost";
 import Home from "./components/HomePage";
 import ErrorPage from './ErrorPage';
 import EditPost from "./components/CMS/EditPost";
+import SinglePost from "./components/SinglePostPage";
 
 const router = createBrowserRouter([
   {
@@ -25,6 +26,11 @@ const router = createBrowserRouter([
         path: "/",
         element: <Home />,
         errorElement: <ErrorPage />,
+      },
+      {
+        path: "/posts/:postId",
+        element: <SinglePost />,
+        errorElement: <ErrorPage />
       },
       {
         path: "/cms",

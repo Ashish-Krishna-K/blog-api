@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, Navigate, Outlet } from "react-router-dom";
-import { getAuthTokenFromLocalStorage } from "../../backendInteraction";
+import { getAuthTokenFromLocalStorage } from "../../helperModule";
 
 export default function CMSEntry() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);

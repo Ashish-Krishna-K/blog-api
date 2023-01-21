@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { clientAxios } from "../backendInteraction";
+import { clientAxios, formatDates } from "../helperModule";
 
 export default function Comment({ postId, commentId }) {
   const [comment, setComment] = useState({});
 
-  const getCommentFromServer = async (id) => {
+  const getCommentFromServer = async (postId, commentId) => {
     try {
       const response = await clientAxios.get(`/post/${postId}/comment/${commentId}`);
       setComment(response.data);
@@ -13,14 +13,19 @@ export default function Comment({ postId, commentId }) {
     }
   }
   useEffect(() => {
-    getCommentFromServer();
+    getCommentFromServer(postId, commentId);
   }, [postId, commentId])
 
   return (
-    <p>
-      <span>{comment.comment_content}</span>
-      <span>By: {comment.created_by}</span>
-      <span>added on: {comment.time_stamp}</span>
-    </p>
+    <>
+      {
+        comment &&
+        <p>
+          <span>{comment.comment_content}</span>
+          <span>By: {comment.created_by}</span>
+          <span>added on: {formatDates(comment.time_stamp)}</span>
+        </p>
+      }
+    </>
   )
 }

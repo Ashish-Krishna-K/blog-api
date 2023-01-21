@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { clientAxios } from "../backendInteraction";
+import { clientAxios } from "../helperModule";
 
 export default function AddComment({ postId }) {
   const [authorInput, setAuthorInput] = useState({ text: '' });

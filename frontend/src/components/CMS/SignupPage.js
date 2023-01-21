@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import { cmsAxios } from "../../backendInteraction";
+import { cmsAxios } from "../../helperModule";
 
 export default function SignUp() {
   const [usernameField, setUsernameField] = useState({ text: '' });

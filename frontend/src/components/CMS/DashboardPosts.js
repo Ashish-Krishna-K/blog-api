@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { cmsAxios } from "../../backendInteraction"
+import { cmsAxios } from "../../helperModule"
 import { Link } from "react-router-dom";
 
 export default function DashboardPosts() {
@@ -40,9 +40,7 @@ export default function DashboardPosts() {
   const deletePostToServer = async (id) => {
     try {
       const response = await cmsAxios.delete(`/user/post/${id}`);
-      if (response.status === 204) {
-        window.location.reload();
-      }
+      window.location.reload();
     } catch (error) {
       setErrors(error.response.data.message);
     }
@@ -70,6 +68,7 @@ export default function DashboardPosts() {
             return (
               <div key={post._id}>
                 <Link to={`/cms_dashboard/posts/${post._id}`}>{post.title}</Link>
+                <p>{`${post.content.slice(0, 101)}...`}</p>
                 {
                   post.is_published ?
                     <button
