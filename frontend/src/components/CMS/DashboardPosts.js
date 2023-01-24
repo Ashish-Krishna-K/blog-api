@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { cmsAxios } from "../../helperModule"
+import { cmsAxios, formatDates } from "../../helperModule"
 import { Link } from "react-router-dom";
 
 export default function DashboardPosts() {
@@ -65,10 +65,16 @@ export default function DashboardPosts() {
       {
         errors ? <p>{errors}</p> :
           posts.length === 0 ? <p>No Posts available</p> : posts.map(post => {
+            const created = formatDates(post.created_at);
+            const published = formatDates(post.published_at);
             return (
-              <div key={post._id}>
+              <div className="dashboard-view-post" key={post._id}>
                 <Link to={`/cms_dashboard/posts/${post._id}`}>{post.title}</Link>
                 <p>{`${post.content.slice(0, 101)}...`}</p>
+                <div>
+                  <p>Created on: {created}</p>
+                  {post.is_published && <p>Published on: {published}</p>}
+                </div>
                 {
                   post.is_published ?
                     <button

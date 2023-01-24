@@ -12,11 +12,17 @@ export default function CMSDashboard() {
     <div>
       {
         <>
-          <section>
+          <section className="cms-dashboard-header">
             <button onClick={handleLogout}>Logout</button>
-            <Link to="/cms_dashboard/create_post">Create New Post</Link>
-            <Link to="/cms_dashboard/posts">Posts</Link>
-            <Link to="/cms_dashboard/comments">Comments</Link>
+            <button>
+              <Link to="/cms_dashboard/create_post">Create New Post</Link>
+            </button>
+            <button>
+              <Link to="/cms_dashboard/posts">Posts</Link>
+            </button>
+            <button>
+              <Link to="/cms_dashboard/comments">Comments</Link>
+            </button>
           </section>
           <section>
             <Outlet />

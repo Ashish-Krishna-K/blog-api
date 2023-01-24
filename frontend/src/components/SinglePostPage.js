@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom"
+import { useParams } from "react-router-dom"
 import { clientAxios, formatDates } from "../helperModule";
 import AddComment from "./AddComment";
 import Comment from "./ViewComment";
@@ -26,43 +26,46 @@ export default function SinglePost() {
   const handleAddComment = () => setAddComment(addComment => !addComment);
 
   return (
-    <section>
+    <section className="single-post-view">
       {
         errors ? <p>{errors}</p> :
           <>
-            <div>
-              {
-                !post._id ? <p>Loading...</p> :
-                  <>
-                    <h3>{post.title}</h3>
-                    <p>{post.content}</p>
-                    <p>{formatDates(post.published_at)}</p>
-                    <Link to={`/cms_dashboard/posts/${post._id}/edit_post`}>Edit this post</Link>
-                  </>
-              }
-            </div>
-            <div>
-              {
-                !addComment ? <button onClick={handleAddComment}>Add comment</button> :
-                  <AddComment postId={post._id} />
-              }
-            </div>
-            <div>
-              {
-                post._id &&
-                <ul>
-                  {post.comments.length > 0 &&
-                    post.comments.map(comment => {
-                      return (
-                        <li key={comment}>
-                          <Comment postId={post._id} commentId={comment} />
-                        </li>
-                      )
-                    })
+            {!post._id ? <p>Loading...</p> :
+              <>
+                <section className="post-content-section">
+                  {
+                    <>
+                      <h2 className="post-title">{post.title}</h2>
+                      <p className="post-published-timestamp">{formatDates(post.published_at)}</p>
+                      <p className="post-content">{post.content}</p>
+                    </>
                   }
-                </ul>
-              }
-            </div>
+                </section>
+                <section className="add-comment-section">
+                  {
+                    !addComment ? <button onClick={handleAddComment}>Add comment</button> :
+                      <AddComment postId={post._id} />
+                  }
+                </section>
+                <section className="view-comments-section">
+                  {
+                    post._id &&
+                    <ul>
+                      <h3>Comments: </h3>
+                      {post.comments.length > 0 &&
+                        post.comments.map(comment => {
+                          return (
+                            <li key={comment}>
+                              <Comment postId={post._id} commentId={comment} />
+                            </li>
+                          )
+                        })
+                      }
+                    </ul>
+                  }
+                </section>
+              </>
+            }
           </>
       }
     </section>

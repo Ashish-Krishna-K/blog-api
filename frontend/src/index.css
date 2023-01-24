@@ -1,13 +1,151 @@
-body {
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed&display=swap');
+
+html,
+body,
+#root {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  padding: 0;
+  height: 100%;
+  font-family: 'Roboto Condensed', sans-serif;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+.App {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid black;
+}
+
+main {
+  flex: 1;
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+}
+
+footer {
+  border-top: 1px solid black;
+  text-align: center;
+}
+
+main>h2 {
+  align-self: center;
+}
+
+.view-post {
+  padding: 1vmax 4vmax;
+  border: 1px solid black;
+  margin: 1vmax;
+}
+
+.flex-vertical {
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-horizontal {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.post-content {
+  white-space: pre-wrap;
+  padding: 1vmax;
+}
+
+.single-post-view {
+  padding: 1vmax;
+}
+
+#add-comment-form {
+  align-items: center;
+}
+
+#add-comment-form>textarea {
+  width: 100%;
+}
+
+.view-comments-section>ul {
+  list-style: none;
+  margin: 0;
+  padding: inherit;
+}
+
+.comments {
+  border: 1px solid black;
+  margin: 1vmax;
+  padding: 1vmax;
+}
+
+.cms-dashboard-header {
+  display: flex;
+  justify-content: space-around;
+  margin: 1vmax 0;
+  padding: 1vmax 0;
+}
+
+button a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.dashboard-view-post {
+  border: 1px solid black;
+  padding: 1vmax;
+}
+
+#create-post-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid black;
+  width: 75%;
+  margin: 5vmax auto;
+}
+
+#create-post-form * {
+  margin: 1vmax;
+}
+
+.comments-list {
+  list-style: none;
+  padding: 1vmax;
+}
+
+.comments-list>li {
+  border: 1px solid black;
+  margin: 1vmax;
+  padding: 1vmax;
+}
+
+.entry-page a {
+  margin: 2vmax;
+}
+
+.links.flex-horizontal {
+  justify-content: center;
+}
+
+#signup-form,
+#login-form {
+  border: 1px solid black;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1vmax;
+  padding: 5vmax;
+}
+
+#signup-form>button,
+#login-form>button {
+  margin: 1vmax;
+  padding: 0 5vmax;
 }

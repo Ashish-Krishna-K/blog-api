@@ -30,40 +30,46 @@ export default function DashboardSinglePost() {
       {
         errors ? <p>{errors}</p> :
           <>
-            <div>
-              {
-                !post._id ? <p>Loading...</p> :
-                  <>
-                    <h3>{post.title}</h3>
-                    <p>{post.content}</p>
-                    <p>Created on: {formatDates(post.created_at)}</p>
-                    {post.is_published && <p>Published on: {formatDates(post.published_at)}</p>}
-                    <Link to={`/cms_dashboard/posts/${post._id}/edit_post`}>Edit this post</Link>
-                  </>
-              }
-            </div>
-            <div>
-              {
-                !addComment ? <button onClick={handleAddComment}>Add comment</button> :
-                  <AddComment postId={post._id} />
-              }
-            </div>
-            <div>
-              {
-                post._id && post.comments.length > 0 &&
-                <ul>
+            {!post._id ? <p>Loading...</p> :
+              <>
+                <section>
                   {
-                    post.comments.map(comment => {
-                      return (
-                        <li key={comment}>
-                          <Comment postId={post._id} commentId={comment} />
-                        </li>
-                      )
-                    })
+                    <>
+                      <div className="flex-horizontal">
+                        <h2 className="post-title">{post.title}</h2>
+                        <Link to={`/cms_dashboard/posts/${post._id}/edit_post`}>Edit this post</Link>
+                      </div>
+                      <p className="post-published-timestamp"> Created on:{formatDates(post.created_at)}</p>
+                      {post.is_published && <p className="post-published-timestamp">Published on: {formatDates(post.published_at)}</p>}
+                      <p className="post-content">{post.content}</p>
+                    </>
                   }
-                </ul>
-              }
-            </div>
+                </section>
+                <section className="add-comment-section">
+                  {
+                    !addComment ? <button onClick={handleAddComment}>Add comment</button> :
+                      <AddComment postId={post._id} />
+                  }
+                </section>
+                <section className="view-comments-section">
+                  {
+                    post._id && post.comments.length > 0 &&
+                    <ul>
+                      <h3>Comments: </h3>
+                      {
+                        post.comments.map(comment => {
+                          return (
+                            <li key={comment}>
+                              <Comment postId={post._id} commentId={comment} />
+                            </li>
+                          )
+                        })
+                      }
+                    </ul>
+                  }
+                </section>
+              </>
+            }
           </>
       }
     </section>

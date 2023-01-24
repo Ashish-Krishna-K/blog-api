@@ -13,13 +13,15 @@ export default function CMSEntry() {
   }, [])
 
   return (
-    <section>
+    <section className="entry-page flex-vertical">
       {
         !isLoggedIn ?
           <>
             <h2>Login</h2>
-            <Link to={`/cms/login`}>Login</Link>
-            <Link to={`/cms/signup`}>SignUp</Link>
+            <div className="flex-horizontal links">
+              <Link to={`/cms/login`}>Login</Link>
+              <Link to={`/cms/signup`}>SignUp</Link>
+            </div>
             <Outlet />
           </>
           : <Navigate replace to="/cms_dashboard/posts" />

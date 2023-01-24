@@ -55,21 +55,23 @@ export default function AddComment({ postId }) {
       {
         status.loading ? <p>Loading...</p> :
           <>
-            <form id="add-comment-form" onSubmit={handleFormSubmit}>
+            <form id="add-comment-form" className="flex-vertical" onSubmit={handleFormSubmit}>
               <textarea
                 id="content"
                 name="comment_content"
                 value={contentInput.text}
                 onChange={handleContentInput}
               ></textarea>
-              <label htmlFor="author">Name*: </label>
-              <input
-                id="author"
-                name="author"
-                value={authorInput.text}
-                onChange={handleAuthorInput}
-              />
-              <button>Submit</button>
+              <div>
+                <label htmlFor="author">Name*: </label>
+                <input
+                  id="author"
+                  name="author"
+                  value={authorInput.text}
+                  onChange={handleAuthorInput}
+                />
+                <button>Submit</button>
+              </div>
             </form>
           </>
       }

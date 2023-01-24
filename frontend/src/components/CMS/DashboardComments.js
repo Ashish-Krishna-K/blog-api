@@ -40,7 +40,7 @@ export default function DashboardComments() {
       {
         errors ? <p>{errors}</p> :
           comments.length === 0 ? <p>No Comments available</p> :
-            <ul>
+            <ul className="comments-list">
               {
                 comments.map(comment => {
                   return (

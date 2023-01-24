@@ -20,11 +20,11 @@ export default function Comment({ postId, commentId }) {
     <>
       {
         comment &&
-        <p>
-          <span>{comment.comment_content}</span>
-          <span>By: {comment.created_by}</span>
-          <span>added on: {formatDates(comment.time_stamp)}</span>
-        </p>
+        <div className="comments">
+          <p>{comment.comment_content}</p>
+          <p>{formatDates(comment.time_stamp)}</p>
+          <p className="post-content">By: {comment.created_by}</p>
+        </div>
       }
     </>
   )
