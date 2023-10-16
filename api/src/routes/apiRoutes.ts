@@ -1,11 +1,20 @@
 import express from 'express';
-import { createToken } from '../controllers/tokenController';
+import { getToken, login, logout, signUp } from '../controllers/authController';
 import { createNewPost, deletePost, editPost, getAllPosts, getSinglePost } from '../controllers/postsController';
 import { createComment, deleteComment, getAllComments } from '../controllers/commentsController';
 const router = express.Router();
 
-// For generating jwt
-router.post('/token', createToken);
+// Post signup route
+router.post('/signup', signUp);
+
+// Post login route
+router.post('/login', login);
+
+// Get access token route
+router.get('/token', getToken);
+
+// Delete logout route
+router.delete('/logout', logout);
 
 // Get all posts
 router.get('/posts', getAllPosts);
@@ -23,12 +32,12 @@ router.put('/posts/:postId', editPost);
 router.delete('/posts/:postId', deletePost);
 
 // Get all comments
-router.get('/comments', getAllComments);
+router.get('/posts/:postId/comments', getAllComments);
 
 // Create new comment
-router.post('/comments', createComment);
+router.post('/posts/:postId/comments', createComment);
 
 // Delete a comment
-router.delete('/comments/:commentId', deleteComment);
+router.delete('/posts/:postId/comments/:commentId', deleteComment);
 
 export default router;

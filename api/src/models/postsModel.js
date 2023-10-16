@@ -1,8 +1,8 @@
-import mongoose from 'mongoose';
-
-const Schema = mongoose.Schema;
-
-const PostsSchema = new Schema(
+'use strict';
+Object.defineProperty(exports, '__esModule', { value: true });
+var mongoose_1 = require('mongoose');
+var Schema = mongoose_1.default.Schema;
+var PostsSchema = new Schema(
   {
     title: { type: String, required: true },
     text: { type: String, required: true },
@@ -13,9 +13,6 @@ const PostsSchema = new Schema(
     timestamps: true,
   },
 );
-
 PostsSchema.index({ updatedAt: -1 });
-
-const Posts = mongoose.model('Posts', PostsSchema);
-
-export default Posts;
+var Posts = mongoose_1.default.model('Posts', PostsSchema);
+exports.default = Posts;

@@ -7,6 +7,7 @@ const AuthorSchema = new Schema({
   lastName: { type: String, required: true },
   email: { type: String, required: true },
   hashedPassword: { type: String, required: true },
+  validToken: { type: String },
 });
 
 AuthorSchema.virtual('fullName').get(function () {

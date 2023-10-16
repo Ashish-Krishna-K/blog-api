@@ -1,21 +1,13 @@
-import mongoose, { InferSchemaType } from 'mongoose';
+import mongoose from 'mongoose';
 
 const Schema = mongoose.Schema;
 
 const CommentsSchema = new Schema({
   text: { type: String, required: true },
   author: { type: String, required: true },
-  createdOn: { type: Date, default: Date.now },
+  createdOn: { type: Date, default: Date.now, immutable: true },
 });
 
-CommentsSchema.virtual('url').get(function () {
-  return `/api/comments/${this.id}`;
-});
-
-interface CommentsModel extends InferSchemaType<typeof CommentsSchema> {
-  url: string;
-}
-
-const Comments = mongoose.model<CommentsModel>('Comments', CommentsSchema);
+const Comments = mongoose.model('Comments', CommentsSchema);
 
 export default Comments;
