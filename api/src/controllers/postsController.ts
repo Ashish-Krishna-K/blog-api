@@ -6,10 +6,14 @@ import { body, validationResult } from 'express-validator';
 export const getAllPosts = async (req: Request, res: Response) => {
   const direction = req.query.d;
   const from = req.query.f;
-  const query = direction === 'next' ? { $lt: from || Date.now().toString() } : { $gt: from || new Date(0).getTime() };
-  const sort = direction === 'next' ? -1 : 1;
+  const query = direction === 'prev' ? { $gt: from || new Date(0).getTime() } : { $lt: from || Date.now().toString() };
+  const sort = direction === 'prev' ? 1 : -1;
   try {
-    const posts = await Posts.find({ createdAt: query }).sort({ createdAt: sort }).limit(5).exec();
+    const posts = await Posts.find({ createdAt: query })
+      .sort({ createdAt: sort })
+      .limit(5)
+      .populate('author', 'firstName lastName')
+      .exec();
     if (posts.length < 1) return res.status(404).json(posts);
     if (sort === 1) posts.reverse();
     return res.json(posts);
@@ -21,7 +25,10 @@ export const getAllPosts = async (req: Request, res: Response) => {
 
 export const getSinglePost = async (req: Request, res: Response) => {
   try {
-    const post = await Posts.findById(req.params.postId).populate('comments').exec();
+    const post = await Posts.findById(req.params.postId)
+      .populate('author', 'firstName lastName')
+      .populate('comments')
+      .exec();
     if (!post) return res.sendStatus(404);
     return res.json(post);
   } catch (error) {
@@ -78,7 +85,10 @@ export const editPost = [
         errors: errors.array(),
       });
     } else {
-      const post = await Posts.findById(req.params.postId).populate('comments').exec();
+      const post = await Posts.findById(req.params.postId)
+        .populate('author', 'firstName lastName')
+        .populate('comments')
+        .exec();
       if (!post) return res.status(404).json('Post not found');
       post.title = formData.title;
       post.text = formData.text;

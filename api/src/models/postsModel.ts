@@ -6,11 +6,13 @@ const PostsSchema = new Schema(
   {
     title: { type: String, required: true },
     text: { type: String, required: true },
-    author: { type: Schema.Types.ObjectId, ref: 'Admin', required: true },
+    author: { type: Schema.Types.ObjectId, ref: 'Author', required: true },
     comments: [{ type: Schema.Types.ObjectId, ref: 'Comments' }],
   },
   {
     timestamps: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
   },
 );
 
