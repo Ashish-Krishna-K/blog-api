@@ -3,6 +3,7 @@ import express from 'express';
 import path from 'path';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
+import cors from "cors"
 
 import apiRouter from './routes/apiRoutes.js';
 import mongoose from 'mongoose';
@@ -24,6 +25,7 @@ connectToDb();
 
 passport.use(verifyStrategy);
 app.use(passport.initialize());
+app.use(cors());
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

@@ -5,18 +5,42 @@ import { body, validationResult } from 'express-validator';
 
 export const getAllPosts = async (req: Request, res: Response) => {
   const direction = req.query.d;
-  const from = req.query.f;
-  const query = direction === 'prev' ? { $gt: from || new Date(0).getTime() } : { $lt: from || Date.now().toString() };
+  const from = req.query.f?.toString();
+  const getForwardQuery = (from: NativeDate | string | number | undefined) => {
+    return {
+      $lt: from || Date.now().toString(),
+    };
+  };
+  const getBackwardQuery = (from: NativeDate | string | number | undefined) => {
+    return {
+      $gt: from || new Date(0).getTime(),
+    };
+  };
+  const mainQuery = direction !== 'prev' ? getForwardQuery(from) : getBackwardQuery(from);
   const sort = direction === 'prev' ? 1 : -1;
   try {
-    const posts = await Posts.find({ createdAt: query })
+    const posts = await Posts.find({ createdAt: mainQuery })
       .sort({ createdAt: sort })
       .limit(5)
       .populate('author', 'firstName lastName')
       .exec();
     if (posts.length < 1) return res.status(404).json(posts);
+    const previousCount = await Posts.countDocuments({
+      createdAt:
+        direction !== 'prev'
+          ? getBackwardQuery(from || Date.now().toString())
+          : getBackwardQuery(from),
+    }).exec();
+    const nextCount = await Posts.countDocuments({
+      createdAt: direction !== 'prev' ? getForwardQuery(posts[4].createdAt) : getForwardQuery(posts[0].createdAt),
+    }).exec();
     if (sort === 1) posts.reverse();
-    return res.json(posts);
+    const data = {
+      previousCount,
+      nextCount,
+      posts,
+    };
+    return res.json(data);
   } catch (error) {
     console.error(error);
     return res.status(500).json(error);

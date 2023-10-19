@@ -122,33 +122,54 @@ export const signUp = [
   },
 ];
 
-export const login = (req: Request, res: Response, next: NextFunction) => {
-  passport.authenticate(
-    'local',
-    {
-      session: false,
-    },
-    async (error: unknown, user: Express.User, info: string) => {
-      if (error) {
-        console.error(error);
-        return res.status(500).json(error);
-      }
-      if (!user) return res.status(401).json(info);
-      const token = generateToken(user.id!);
-      try {
-        const admin = await Author.findById(user.id).exec();
-        if (admin) {
-          admin.validToken = token.refreshToken;
-          await admin.save();
+export const login = [
+  body('email')
+    .trim()
+    .notEmpty()
+    .withMessage('Email is required')
+    .isEmail()
+    .withMessage("Email must be of the format 'you@email.com'")
+    .escape(),
+  body('password').trim().notEmpty().withMessage('Password is required').escape(),
+  (req: Request, res: Response, next: NextFunction) => {
+    const errors = validationResult(req);
+    const formData = {
+      email: req.body.email,
+      password: req.body.password,
+    };
+    if (!errors.isEmpty()) {
+      return res.status(406).json({
+        formData,
+        errors: errors.array(),
+      });
+    }
+    passport.authenticate(
+      'local',
+      {
+        session: false,
+      },
+      async (error: unknown, user: Express.User, info: string) => {
+        if (error) {
+          console.error(error);
+          return res.status(500).json(error);
         }
-      } catch (error) {
-        console.error(error);
-        return res.status(500).json(error);
-      }
-      return res.json(token);
-    },
-  )(req, res, next);
-};
+        if (!user) return res.status(401).json(info);
+        const token = generateToken(user.id!);
+        try {
+          const admin = await Author.findById(user.id).exec();
+          if (admin) {
+            admin.validToken = token.refreshToken;
+            await admin.save();
+          }
+        } catch (error) {
+          console.error(error);
+          return res.status(500).json(error);
+        }
+        return res.json(token);
+      },
+    )(req, res, next);
+  },
+];
 
 export const authorizeAccessToken = (req: Request, res: Response, next: NextFunction) => {
   const token = extractToken(req);
