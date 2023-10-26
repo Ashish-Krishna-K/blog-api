@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose, { InferSchemaType } from 'mongoose';
 
 const Schema = mongoose.Schema;
 
@@ -16,6 +16,14 @@ const AuthorSchema = new Schema(
   },
 );
 
-const Author = mongoose.model('Author', AuthorSchema);
+AuthorSchema.virtual('fullName').get(function () {
+  return `${this.firstName} ${this.lastName}`;
+});
+
+interface AuthorModel extends InferSchemaType<typeof AuthorSchema> {
+  fullName: string;
+}
+
+const Author = mongoose.model<AuthorModel>('Author', AuthorSchema);
 
 export default Author;
