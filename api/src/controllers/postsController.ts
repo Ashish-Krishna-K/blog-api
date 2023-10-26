@@ -111,20 +111,32 @@ export const editPost = [
         errors: errors.array(),
       });
     } else {
-      const post = await Posts.findById(req.params.postId)
-        .populate('author', 'firstName lastName')
-        .populate('comments')
-        .exec();
-      if (!post) return res.status(404).json('Post not found');
-      post.title = formData.title;
-      post.text = formData.text;
       try {
+        const post = await Posts.findById(req.params.postId).exec();
+        if (!post) return res.status(404).json('Post not found');
+        post.title = formData.title;
+        post.text = formData.text;
         await post.save();
         return res.json(post);
       } catch (error) {
         console.error(error);
         return res.status(500).json(error);
       }
+    }
+  },
+];
+
+export const publishPost = [
+  authorizeAccessToken,
+  async (req: Request, res: Response) => {
+    try {
+      const post = await Posts.findById(req.params.postId, 'isPublished').exec();
+      if (!post) return res.status(404).json('Post not found');
+      post.isPublished = !post.isPublished;
+      post.save();
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json(error);
     }
   },
 ];
