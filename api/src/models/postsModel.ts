@@ -7,6 +7,7 @@ const PostsSchema = new Schema(
     title: { type: String, required: true },
     text: { type: String, required: true },
     author: { type: Schema.Types.ObjectId, ref: 'Author', required: true },
+    isPublished: { type: Boolean, required: true },
     comments: [{ type: Schema.Types.ObjectId, ref: 'Comments' }],
   },
   {
