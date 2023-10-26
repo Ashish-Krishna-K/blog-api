@@ -25,7 +25,7 @@ const generateToken = (id: string) => {
   };
 };
 
-const extractToken = (req: Request): string | undefined => {
+export const extractToken = (req: Request): string | undefined => {
   const bearer = req.headers['authorization'];
   if (!bearer) return undefined;
   return bearer.split(' ')[1];

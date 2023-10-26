@@ -1,12 +1,13 @@
 import { Request, Response } from 'express';
 import Posts from '../models/postsModel';
-import { authorizeAccessToken } from './authController';
+import { authorizeAccessToken, extractToken } from './authController';
 import { body, validationResult } from 'express-validator';
 import Comments from '../models/commentsModel';
 
 export const getAllPosts = async (req: Request, res: Response) => {
   const direction = req.query.d;
   const from = req.query.f?.toString();
+  const token = !!extractToken(req);
   const getForwardQuery = (from: NativeDate | string | number | undefined) => {
     return {
       $lt: from || Date.now().toString(),
@@ -20,22 +21,47 @@ export const getAllPosts = async (req: Request, res: Response) => {
   const mainQuery = direction !== 'prev' ? getForwardQuery(from) : getBackwardQuery(from);
   const sort = direction === 'prev' ? 1 : -1;
   try {
-    const posts = await Posts.find({ createdAt: mainQuery })
+    const posts = await Posts.find(
+      token
+        ? {
+            createdAt: mainQuery,
+          }
+        : {
+            createdAt: mainQuery,
+            isPublished: true,
+          },
+    )
       .sort({ createdAt: sort })
       .limit(5)
       .populate('author', 'firstName lastName')
       .exec();
     if (posts.length < 1) return res.status(404).json(posts);
-    const previousCount = await Posts.countDocuments({
-      createdAt:
-        direction !== 'prev'
-          ? getBackwardQuery(posts[0].createdAt || Date.now().toString())
-          : getBackwardQuery(posts[posts.length - 1].createdAt),
-    }).exec();
-    const nextCount = await Posts.countDocuments({
-      createdAt:
-        direction !== 'prev' ? getForwardQuery(posts[posts.length - 1].createdAt) : getForwardQuery(posts[0].createdAt),
-    }).exec();
+    const prevQuery =
+      direction !== 'prev'
+        ? getBackwardQuery(posts[0].createdAt || Date.now().toString())
+        : getBackwardQuery(posts[posts.length - 1].createdAt);
+    const nextQuery =
+      direction !== 'prev' ? getForwardQuery(posts[posts.length - 1].createdAt) : getForwardQuery(posts[0].createdAt);
+    const previousCount = await Posts.countDocuments(
+      token
+        ? {
+            createdAt: prevQuery,
+          }
+        : {
+            createdAt: prevQuery,
+            isPublished: true,
+          },
+    ).exec();
+    const nextCount = await Posts.countDocuments(
+      token
+        ? {
+            createdAt: nextQuery,
+          }
+        : {
+            createdAt: nextQuery,
+            isPublished: true,
+          },
+    ).exec();
     if (sort === 1) posts.reverse();
     const data = {
       previousCount,
@@ -51,11 +77,13 @@ export const getAllPosts = async (req: Request, res: Response) => {
 
 export const getSinglePost = async (req: Request, res: Response) => {
   try {
+    const token = !!extractToken(req);
     const post = await Posts.findById(req.params.postId)
       .populate('author', 'firstName lastName')
       .populate('comments')
       .exec();
     if (!post) return res.sendStatus(404);
+    if (!post.isPublished && !token) return res.sendStatus(403);
     return res.json(post);
   } catch (error) {
     console.error(error);
@@ -133,7 +161,8 @@ export const publishPost = [
       const post = await Posts.findById(req.params.postId, 'isPublished').exec();
       if (!post) return res.status(404).json('Post not found');
       post.isPublished = !post.isPublished;
-      post.save();
+      await post.save();
+      res.sendStatus(200);
     } catch (error) {
       console.error(error);
       return res.status(500).json(error);
