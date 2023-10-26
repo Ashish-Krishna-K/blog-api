@@ -1,13 +1,13 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import App from "./app/App.tsx";
-import "./index.css";
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import './index.css';
+import Router from './components/routes/Router.tsx';
 
 const root = document.createElement('div');
-root.id = "root";
+root.id = 'root';
 
-ReactDOM.createRoot(document.getElementById("root") ?? root).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+ReactDOM.createRoot(document.getElementById('root') ?? root).render(
+	<React.StrictMode>
+		<Router />
+	</React.StrictMode>,
 );

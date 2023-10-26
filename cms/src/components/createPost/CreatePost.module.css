@@ -1,0 +1,42 @@
+.form {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2vmin;
+}
+
+.form>button {
+  padding: 2vh 0;
+  background-color: var(--primary);
+  color: var(--main-bg);
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: scale 0.2s ease-in-out;
+}
+
+.form>button:hover {
+  scale: 0.9;
+}
+
+.form,
+.form * {
+  border-radius: 10px;
+}
+
+.title,
+.text {
+  grid-column: 1 / 3;
+}
+
+.titleInput {
+	width: 100%;
+	height: 4vh;
+  padding: 1vh;
+  font-weight: bold;
+}
+
+@media (max-width: 500px) {
+  h2 {
+    text-align: center;
+  }
+}

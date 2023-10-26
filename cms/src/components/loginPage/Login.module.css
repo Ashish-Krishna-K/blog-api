@@ -1,0 +1,55 @@
+.container {
+  display: grid;
+  align-items: center;
+  justify-items: center;
+}
+
+.form {
+  width: fit-content;
+  padding: 1vh 4vw;
+  display: grid;
+  grid-template-rows: repeat(3, 1fr);
+  background-color: var(--primary);
+  border-radius: 10px;
+  color: var(--main-bg);
+}
+
+.form>div:not(.controls) {
+  display: flex;
+  flex-direction: column;
+  margin: 1vh 0;
+}
+
+.form label {
+  font-weight: bold;
+}
+
+.form input {
+  padding: 1vh;
+  border-radius: 5px;
+}
+
+.controls {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.controls button {
+  padding: 2px 20px;
+  border-radius: 5px;
+  background-color: var(--main-offset);
+  color: #000;
+  font-weight: bold;
+  cursor: pointer;
+  transition: scale 0.2s ease-in-out;
+}
+
+.controls button:hover {
+  scale: 0.9;
+}
+
+.errorDiv {
+  align-items: center;
+}

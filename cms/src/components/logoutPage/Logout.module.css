@@ -1,0 +1,5 @@
+.form {
+  margin-top: 4vh;
+  display: flex;
+  justify-content: space-around;
+}

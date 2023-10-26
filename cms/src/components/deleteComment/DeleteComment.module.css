@@ -1,0 +1,16 @@
+.comment {
+  margin: 1vh 1vw;
+  background-color: var(--main-bg);
+  color: var(--primary);
+  padding: 1vmin;
+  border-radius: 10px;
+}
+
+.authored p {
+  margin: 0;
+}
+
+.form {
+  display: flex;
+  justify-content: space-around;
+}

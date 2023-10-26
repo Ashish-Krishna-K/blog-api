@@ -21,5 +21,8 @@ module.exports = {
       'warn',
       { allowConstantExport: true },
     ],
+    "@typescript-eslint/consistent-type-definitions": ["error", "type"],
+    "require-await": "off",
+    "@typescript-eslint/require-await": "off",
   },
 }

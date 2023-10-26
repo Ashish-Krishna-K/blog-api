@@ -1,0 +1,40 @@
+<form action="<%= `/post/${post.id}/comment/create` %>" method="post" id="add-comment-frm">
+  <div>
+    <label for="text">Your Comment: </label>
+    <% if (typeof errors !== "undefined") { %>
+      <% errors.forEach(error => { %>
+        <% if (error.path === "text") { %>
+          <span class="error">
+            <%= error.msg %>
+          </span>
+        <% } %>
+      <% }) %>
+    <% } %>
+    <textarea 
+      name="text" 
+      id="add-comment" 
+      cols="30" 
+      rows="10"
+      required
+    >
+      <%= typeof formData !== "undefined" ? formData.text : "" %>
+    </textarea>
+  </div>
+  <div>
+    <label for="display-name">Display Name</label>
+    <% if (typeof errors !== "undefined") { %>
+      <% errors.forEach(error => { %>
+        <% if (error.path === "author") { %>
+          <span class="error">
+            <%= error.msg %>
+          </span>
+        <% } %>
+      <% }) %>
+    <% } %>
+    <input type="text" name="author" id="display-name" required value="<%= typeof formData !== "undefined" ? formData.author : "" %>">
+  </div>
+  <div class="controls">
+    <button type="submit">Add</button>
+    <button type="reset">Clear</button>
+  </div>
+</form>

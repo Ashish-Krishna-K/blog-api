@@ -1,0 +1,17 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.main {
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (max-width: 310px) {
+  .header {
+    flex-direction: column;
+  }
+}

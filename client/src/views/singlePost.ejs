@@ -1,0 +1,49 @@
+<%- include('header') %>
+<main id="single-post">
+  <article>
+    <h2><%= title %></h2>
+    <div class="post-meta">
+      <em class="lighter-shade">
+        <p>
+          <span>
+            Posted on: <%= post.createdAt %>
+          </span>
+          <span>By, <%= `${post.author.firstName} ${post.author.lastName}` %></span>
+        </p>
+        <p>
+          Last Updated On: <%= post.updatedAt %>
+        </p>
+      </em>
+    </div>
+    <div>
+      <%- post.text %>
+    </div>
+  </article>
+  <hr>
+  <div>
+    <button id="add-comment-btn" value="<%= typeof errors !== "undefined" %>">Add Comment</button>
+    <dialog id="add-comment-modal">
+      <button type="button" id="cancel-btn">Cancel</button>
+      <%- include('addCommentForm') %>
+    </dialog>
+  </div>
+  <div>
+    <h3>Comments</h3>
+    <% if (post.comments.length > 0) { %>
+      <ul class="commentList">
+        <% post.comments.forEach(comment => { %>
+          <li class="comment">
+            <div  class="meta">
+              <p><strong><%= comment.author %> says: </strong></p>
+              <p class="lighter-shade"><em><%= comment.createdOn %></em></p>
+            </div>
+            <div class="text"><%- comment.text %></div>
+          </li>
+        <% }) %>
+      </ul>
+    <% } else { %>
+      <p>No Comments yet...</p>
+    <% } %>
+  </div>
+</main>
+<%- include('footer') %>

@@ -1,0 +1,39 @@
+{
+  "name": "client",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "build": "npx tsc && cp -r src/views/ dist/ && cp dist/script.js public/javascripts",
+    "prestart": "npm run build",
+    "start": "DEBUG=client:* node ./bin/www",
+    "lint": "eslint src/**/*.ts --fix && npm run format",
+    "format": "prettier src/. --write",
+    "preserve": "npm run build",
+    "serve": "npx tsc -w & nodemon ./bin/www"
+  },
+  "dependencies": {
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "dotenv": "^16.3.1",
+    "ejs": "^3.1.9",
+    "express": "^4.18.2",
+    "http-errors": "~1.6.3",
+    "morgan": "~1.9.1",
+    "tinymce": "^6.7.1"
+  },
+  "devDependencies": {
+    "@types/cookie-parser": "^1.4.5",
+    "@types/ejs": "^3.1.4",
+    "@types/express": "^4.17.20",
+    "@types/http-errors": "^2.0.3",
+    "@types/morgan": "^1.9.7",
+    "@types/node": "^20.8.8",
+    "@typescript-eslint/eslint-plugin": "^6.9.0",
+    "@typescript-eslint/parser": "^6.9.0",
+    "eslint": "^8.52.0",
+    "eslint-config-prettier": "^9.0.0",
+    "nodemon": "^3.0.1",
+    "prettier": "^3.0.3",
+    "typescript": "^5.2.2"
+  }
+}

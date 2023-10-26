@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <% if (title !== "Recent Posts") { %>
+      <script src="/javascripts/script.js" defer></script>
+      <script src= "/tinymce/tinymce.min.js"></script>
+      <script src="/javascripts/tinymce-config.js" defer></script>
+    <% } %>
+    <title><%= title %></title>
+  </head>
+  <body>
+    <header>
+      <a href="/">
+        <h1>Personal Blog</h1>
+      </a>
+    </header>

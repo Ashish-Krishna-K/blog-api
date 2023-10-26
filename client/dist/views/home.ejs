@@ -1,0 +1,52 @@
+<%- include('header') %>
+<main id="home-page">
+  <h2><%= title %></h2>
+  <div class="home-container">
+    <nav class="navLinks">
+      <% if (typeof previous !== "undefined") { %>
+        <a href="<%= `/?cursor=${previous}&direction=prev` %>" class="prevLink">Previous</a>
+      <% } %>
+      <% if (typeof next !== "undefined") { %>
+        <a href="<%= `/?cursor=${next}` %>" class="nextLink">Next</a>
+      <% } %>
+    </nav>
+    <hr>
+      <ul class="postsList">
+        <% posts.forEach(post => { %>
+          <li class="post-item">
+            <div>
+              <a href="<%= `/post/${post.id}` %>">
+                <h3><%= post.title %></h3>
+              </a>
+              <p class="lighter-shade meta">
+                <em>
+                  <span>
+                    Posted on, <%= post.createdAt %>
+                  </span>
+                  <span>
+                    by, <%= `${post.author.firstName} ${post.author.lastName}` %>
+                  </span>
+                </em>
+              </p>
+            </div>
+            <div class="text">
+              <%- post.text %>
+            </div>
+            <div>
+              <p>Comments: <%= post.comments.length %></p>
+            </div>
+          </li>
+        <% }) %>
+      </ul>
+    <hr>
+    <nav class="navLinks">
+      <% if (typeof previous !== "undefined") { %>
+        <a href="<%= `/?cursor=${previous}&direction=prev` %>" class="prevLink">Previous</a>
+      <% } %>
+      <% if (typeof next !== "undefined") { %>
+        <a href="<%= `/?cursor=${next}&direction=prev` %>" class="nextLink">Next</a>
+      <% } %>
+    </nav>
+  </div>
+</main>
+<%- include('footer') %>

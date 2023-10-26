@@ -173,14 +173,14 @@ export const login = [
 
 export const authorizeAccessToken = (req: Request, res: Response, next: NextFunction) => {
   const token = extractToken(req);
-  if (!token) return res.sendStatus(401).json('Token not available');
+  if (!token) return res.status(401).json('Token not available');
   jwt.verify(token, process.env.ACCESS_TOKEN_SECRET!, (error, data) => {
     if (error) {
       console.error(error);
-      return res.sendStatus(403).json('Token not valid');
+      return res.status(403).json('Token not valid');
     }
     if (data) {
-      req.user = typeof data === 'string' ? { id: data } : { id: data.user.id };
+      req.user = typeof data === 'string' ? { id: data } : { id: data.id };
     }
     return next();
   });
@@ -188,11 +188,11 @@ export const authorizeAccessToken = (req: Request, res: Response, next: NextFunc
 
 export const authorizeRefreshToken = (req: Request, res: Response, next: NextFunction) => {
   const token = extractToken(req);
-  if (!token) return res.sendStatus(401).json('Token not available');
+  if (!token) return res.status(401).json('Token not available');
   jwt.verify(token, process.env.REFRESH_TOKEN_SECRET!, async (error, data) => {
     if (error) {
       console.error(error);
-      return res.sendStatus(403).json('Token not valid');
+      return res.status(403).json('Token not valid');
     }
     if (data) {
       const userId = typeof data === 'string' ? data : (data.id as string);
@@ -217,7 +217,7 @@ export const getToken = [
       const admin = await Author.findById(req.user?.id).exec();
       if (!admin) return res.status(401).json('User not found.');
       const newToken = generateToken(admin.id);
-      return res.json(newToken.refreshToken);
+      return res.json(newToken.accessToken);
     } catch (error) {
       console.error(error);
       return res.status(500).json(error);

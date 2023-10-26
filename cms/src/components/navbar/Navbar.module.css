@@ -1,0 +1,14 @@
+.navbar {
+  display: flex; 
+  gap: 3vw;
+}
+
+@media (max-width: 310px) {
+  nav {
+    width: 100%;
+  }
+
+  .navbar {
+    justify-content: space-around;
+  }
+}

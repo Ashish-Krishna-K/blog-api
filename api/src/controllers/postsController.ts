@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import Posts from '../models/postsModel';
 import { authorizeAccessToken } from './authController';
 import { body, validationResult } from 'express-validator';
+import Comments from '../models/commentsModel';
 
 export const getAllPosts = async (req: Request, res: Response) => {
   const direction = req.query.d;
@@ -28,11 +29,12 @@ export const getAllPosts = async (req: Request, res: Response) => {
     const previousCount = await Posts.countDocuments({
       createdAt:
         direction !== 'prev'
-          ? getBackwardQuery(from || Date.now().toString())
-          : getBackwardQuery(from),
+          ? getBackwardQuery(posts[0].createdAt || Date.now().toString())
+          : getBackwardQuery(posts[posts.length - 1].createdAt),
     }).exec();
     const nextCount = await Posts.countDocuments({
-      createdAt: direction !== 'prev' ? getForwardQuery(posts[4].createdAt) : getForwardQuery(posts[0].createdAt),
+      createdAt:
+        direction !== 'prev' ? getForwardQuery(posts[posts.length - 1].createdAt) : getForwardQuery(posts[0].createdAt),
     }).exec();
     if (sort === 1) posts.reverse();
     const data = {
@@ -80,7 +82,7 @@ export const createNewPost = [
       const post = new Posts({
         title: formData.title,
         text: formData.text,
-        author: req.user,
+        author: req.user?.id,
       });
       try {
         await post.save();
@@ -131,6 +133,9 @@ export const deletePost = [
   authorizeAccessToken,
   async (req: Request, res: Response) => {
     try {
+      const post = await Posts.findById(req.params.postId).exec();
+      if (!post) return res.sendStatus(200);
+      await Promise.all(post.comments.map((comment) => Comments.findByIdAndDelete(comment).exec() ?? []));
       await Posts.findByIdAndDelete(req.params.postId).exec();
       return res.sendStatus(200);
     } catch (error) {

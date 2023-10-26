@@ -1,0 +1,81 @@
+.container {
+	display: flex;
+	flex-direction: column;
+	overflow: auto;
+}
+
+.container hr {
+	margin-left: 0;
+	margin-right: 0;
+}
+
+.navLinks {
+	display: flex;
+	align-items: center;
+	padding: 1vmin;
+}
+
+.nextLink {
+	margin-left: auto;
+}
+
+.prevLink {
+	margin-right: auto;
+}
+
+.list {
+	overflow: auto;
+	padding: 1vh 2vw;
+}
+
+.post {
+	margin: 2vh 0;
+	padding: 1vmax;
+	border-radius: 10px;
+	background-color: var(--primary);
+	color: #000;
+}
+
+.post a,
+.post a:visited {
+	color: var(--main-bg);
+}
+
+.post h3 {
+	margin-bottom: 0;
+}
+
+.meta {
+	margin-top: 0;
+}
+
+.meta em {
+	opacity: 0.6;
+	display: inline-flex;
+	gap: 1vw;
+}
+
+.text {
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+.text * {
+	display: inline;
+	overflow: hidden;
+	white-space: inherit;
+	text-overflow: ellipsis;
+}
+
+.controls {
+	display: flex;
+	justify-content: space-around;
+}
+
+@media (max-width: 500px) {
+	.meta em {
+		flex-direction: column;
+		gap: 1vh;
+	}
+}
