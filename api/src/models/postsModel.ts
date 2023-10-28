@@ -17,7 +17,7 @@ const PostsSchema = new Schema(
   },
 );
 
-PostsSchema.index({ updatedAt: -1 });
+PostsSchema.index({ createdAt: -1, updatedAt: -1 });
 
 const Posts = mongoose.model('Posts', PostsSchema);
 
