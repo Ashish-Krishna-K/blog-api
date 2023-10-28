@@ -1,0 +1,13 @@
+.navLinks {
+	display: flex;
+	align-items: center;
+	padding: 1vmin;
+}
+
+.nextLink {
+	margin-left: auto;
+}
+
+.prevLink {
+	margin-right: auto;
+}
