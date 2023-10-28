@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from 'express';
+import type { NextFunction, Request, Response } from 'express';
 import { body, validationResult } from 'express-validator';
 import jwt from 'jsonwebtoken';
 import Author from '../models/authorModel';
@@ -6,6 +6,7 @@ import { compare, hash } from 'bcryptjs';
 import passport from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
 
+// Adding a id property to the User object in Express's request object.
 declare global {
   namespace Express {
     interface User {
@@ -14,7 +15,13 @@ declare global {
   }
 }
 
-const generateToken = (id: string) => {
+type TTokens = {
+  accessToken: string,
+  refreshToken: string,
+};
+
+// Generate new access and refresh tokens based on payload
+const generateToken = (id: string): TTokens => {
   const accessToken = jwt.sign({ id }, process.env.ACCESS_TOKEN_SECRET!, {
     expiresIn: '1h',
   });
@@ -25,19 +32,20 @@ const generateToken = (id: string) => {
   };
 };
 
+// Extract token from the request object
 export const extractToken = (req: Request): string | undefined => {
   const bearer = req.headers['authorization'];
   if (!bearer) return undefined;
   return bearer.split(' ')[1];
 };
 
+// LocalStrategy for passport.
 export const verifyStrategy = new LocalStrategy(
   {
     usernameField: 'email',
     passwordField: 'password',
-    passReqToCallback: true,
   },
-  async (req, email, password, done) => {
+  async (email, password, done) => {
     try {
       const admin = await Author.findOne({ email }).exec();
       if (!admin) return done(null, false, { message: 'Email not found' });
@@ -51,6 +59,7 @@ export const verifyStrategy = new LocalStrategy(
   },
 );
 
+// Post signup route
 export const signUp = [
   body('firstName').trim().notEmpty().withMessage('First Name is required').escape(),
   body('lastName').trim().notEmpty().withMessage('Last Name is required').escape(),
@@ -86,6 +95,7 @@ export const signUp = [
     .withMessage('Password must contain atleast 1 numeric digit')
     .matches(/[`~!@#$%^&*()_\-+=|\\:;"'<,>.?/]/g)
     .withMessage('Password must contain atleast 1 special character')
+    // Checking if "password" and "confirm password" fields match
     .custom((value, { req }) => req.body.password === value)
     .withMessage('Passwords do not match')
     .escape(),
@@ -122,6 +132,7 @@ export const signUp = [
   },
 ];
 
+// Post login route
 export const login = [
   body('email')
     .trim()
@@ -153,8 +164,8 @@ export const login = [
           console.error(error);
           return res.status(500).json(error);
         }
-        if (!user) return res.status(401).json(info);
-        const token = generateToken(user.id!);
+        if (!user || !user.id) return res.status(401).json(info);
+        const token = generateToken(user.id);
         try {
           const admin = await Author.findById(user.id).exec();
           if (admin) {
@@ -171,6 +182,8 @@ export const login = [
   },
 ];
 
+
+// A function to check if the access token is valid.
 export const authorizeAccessToken = (req: Request, res: Response, next: NextFunction) => {
   const token = extractToken(req);
   if (!token) return res.status(401).json('Token not available');
@@ -186,6 +199,7 @@ export const authorizeAccessToken = (req: Request, res: Response, next: NextFunc
   });
 };
 
+// A function to check if the refresh token is valid.
 export const authorizeRefreshToken = (req: Request, res: Response, next: NextFunction) => {
   const token = extractToken(req);
   if (!token) return res.status(401).json('Token not available');
@@ -196,6 +210,9 @@ export const authorizeRefreshToken = (req: Request, res: Response, next: NextFun
     }
     if (data) {
       const userId = typeof data === 'string' ? data : (data.id as string);
+      // Although the refresh token was verified to be valid, we still need to check the 
+      // database if the token itself is currently in use, if not then the user needs to 
+      // login again.
       try {
         const admin = await Author.findById(userId).exec();
         if (!admin) return res.status(404).json('User not found.');
@@ -210,6 +227,11 @@ export const authorizeRefreshToken = (req: Request, res: Response, next: NextFun
   });
 };
 
+// There is two seperate functions to authorize the access token and refresh tokens because
+// both have their own secrets.
+
+
+// Get access token route
 export const getToken = [
   authorizeRefreshToken,
   async (req: Request, res: Response) => {
@@ -225,12 +247,17 @@ export const getToken = [
   },
 ];
 
+// Delete logout route
 export const logout = [
+  // checking the refresh token instead of access token because we're only
+  // storing refresh token as valid in database.
   authorizeRefreshToken,
   async (req: Request, res: Response) => {
     try {
       const admin = await Author.findById(req.user?.id).exec();
       if (admin) {
+        // by resetting the validToken field, whenever the authorizeRefreshToken
+        // is called the provided refreshToken can be invalidated.
         admin.validToken = '';
         await admin.save();
       }

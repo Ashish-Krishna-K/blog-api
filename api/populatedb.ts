@@ -1,3 +1,5 @@
+/** A script to populate the DB with dummy data */
+
 import 'dotenv/config.js';
 import mongoose from 'mongoose';
 import Posts from './src/models/postsModel';
