@@ -1,3 +1,4 @@
+// Format date to a human readable format
 const getDateFormatted = (date: Date) => {
   return new Intl.DateTimeFormat('en-US', {
     year: 'numeric',
@@ -9,6 +10,8 @@ const getDateFormatted = (date: Date) => {
   }).format(new Date(date));
 };
 
+// Unescape escaped text elements so it can be 
+// rendered as HTML
 const getUnescapedHtml = (text: string) => {
   return text
     .replace(/&amp;/g, '&')

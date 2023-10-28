@@ -1,6 +1,6 @@
 import 'dotenv/config';
-import createHttpError, { HttpError } from 'http-errors';
-import express, { Request, Response } from 'express';
+import createHttpError, { type HttpError } from 'http-errors';
+import express, { type Request, type Response } from 'express';
 import path from 'path';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
