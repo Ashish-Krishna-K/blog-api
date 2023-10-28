@@ -1,6 +1,6 @@
 import { Await, useLoaderData, useNavigation } from 'react-router-dom';
 import { Suspense } from 'react';
-import { HomeLoaderPromise } from '../../types';
+import type { HomeLoaderPromise } from '../../types';
 import PostsList from '../postsList/PostsList';
 import AsyncError from '../errorPage/AsyncError';
 import OutletSkeleton from '../skeletons/OutletSkeleton';

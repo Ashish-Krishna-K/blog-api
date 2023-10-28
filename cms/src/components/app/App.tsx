@@ -5,6 +5,8 @@ import Navbar from '../navbar/Navbar';
 import styles from './App.module.css';
 
 const App = () => {
+	// Check if localStorage has token, if true user has logged in
+	// if false user needs to login.
 	const auth = !!loadTokenFromStorage();
 
 	if (!auth) return <Navigate to={'/login'} />;

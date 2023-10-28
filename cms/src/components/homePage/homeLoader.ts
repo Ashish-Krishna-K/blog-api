@@ -6,13 +6,14 @@ const loader: LoaderFunction = ({ request }) => {
 	const direction = new URL(request.url).searchParams.get('d');
 	const token = loadTokenFromStorage();
 	if (token === null) return redirect('/login');
+	const base = import.meta.env.VITE_API_URI;
 	let fetchUrl;
 	if (cursor) {
 		fetchUrl = direction
-			? `${import.meta.env.VITE_API_URI}/posts?f=${cursor}&d=${direction}`
-			: `${import.meta.env.VITE_API_URI}/posts?f=${cursor}`;
+			? `${base}/posts?f=${cursor}&d=${direction}`
+			: `${base}/posts?f=${cursor}`;
 	} else {
-		fetchUrl = `${import.meta.env.VITE_API_URI}/posts`;
+		fetchUrl = `${base}/posts`;
 	}
 	const fetchOpts: RequestInit = {
 		mode: 'cors',
@@ -26,4 +27,4 @@ const loader: LoaderFunction = ({ request }) => {
 	});
 };
 
-export { loader };
+export default loader ;

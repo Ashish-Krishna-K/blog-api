@@ -1,5 +1,9 @@
 import { ActionFunction, redirect } from 'react-router-dom';
-import { getNewToken, loadTokenFromStorage } from '../../helperModules/helpers';
+import {
+	clearTokenFromStorage,
+	getNewToken,
+	loadTokenFromStorage,
+} from '../../helperModules/helpers';
 
 const submitForm = async (id: string, token: string) => {
 	const apiUrl = `${import.meta.env.VITE_API_URI}/posts/${id}`;
@@ -12,7 +16,7 @@ const submitForm = async (id: string, token: string) => {
 		},
 	};
 	return fetch(apiUrl, fetchOpts);
-}
+};
 
 const action: ActionFunction = async ({ params }) => {
 	try {
@@ -22,7 +26,14 @@ const action: ActionFunction = async ({ params }) => {
 		const response = await submitForm(postId, token.accessToken);
 		if (!response.ok) {
 			if (response.status === 401 || response.status === 403) {
-				const newToken = (await getNewToken(token.refreshToken)) as string;
+				// token is not valid, request new token
+				const newToken = await getNewToken(token.refreshToken);
+				if (typeof newToken === 'undefined') {
+					// Something went wrong when requesting new token,
+					// logout user and redirect user to login page.
+					clearTokenFromStorage();
+					return redirect('/login');
+				}
 				const response = await submitForm(postId, newToken);
 				if (!response.ok) throw new Error(response.statusText);
 				else return redirect('/');
@@ -37,4 +48,4 @@ const action: ActionFunction = async ({ params }) => {
 	}
 };
 
-export { action };
+export default action;

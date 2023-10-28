@@ -1,5 +1,6 @@
 import './skeletons.css';
 
+// Skeleton loader for the single post page.
 const PostSkeleton = () => {
 	const dummy = [1, 2, 3, 4, 5];
 	return (

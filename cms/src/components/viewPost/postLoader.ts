@@ -4,7 +4,7 @@ import { loadTokenFromStorage } from '../../helperModules/helpers';
 const loader: LoaderFunction = ({ params }) => {
 	if (typeof params === 'undefined') return redirect('/');
 	const token = loadTokenFromStorage();
-	if (token === null) return redirect('/');
+	if (token === null) return redirect('/login');
 	const url = `${import.meta.env.VITE_API_URI}/posts/${params.postId}`;
 	const opts: RequestInit = {
 		mode: 'cors',
@@ -18,4 +18,4 @@ const loader: LoaderFunction = ({ params }) => {
 	});
 };
 
-export { loader };
+export default loader ;

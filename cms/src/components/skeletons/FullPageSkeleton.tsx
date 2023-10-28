@@ -1,6 +1,7 @@
 import OutletSkeleton from './OutletSkeleton';
 import './skeletons.css';
 
+// Skeleton loader for inital page load.
 const FullPageSkeleton = () => {
 	return (
 		<>

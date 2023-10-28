@@ -1,4 +1,4 @@
-import { FC, ReactNode, useEffect, useRef, useState } from 'react';
+import { type FC, type ReactNode, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './ModalRoute.module.css';
 
@@ -22,6 +22,7 @@ const ModalRoute: FC<ModalRouteProps> = ({ shouldOpen = true, children }) => {
 	}, [isOpen]);
 	const closeModal = () => {
 		setIsOpen(false);
+		// go "back" in the browser after closing the modal
 		navigate(-1);
 	};
 	const handleEscapeBtnPress = (

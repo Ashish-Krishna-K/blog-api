@@ -1,4 +1,4 @@
-import { TComment } from '../../types';
+import type { TComment } from '../../types';
 import { getFormattedDate } from '../../helperModules/helpers';
 import parse from 'html-react-parser';
 import { Link } from 'react-router-dom';

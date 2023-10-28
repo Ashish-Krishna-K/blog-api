@@ -1,5 +1,5 @@
 import { Await, useLoaderData, useNavigation } from 'react-router-dom';
-import { PostLoaderPromise } from '../../types';
+import type { PostLoaderPromise } from '../../types';
 import { Suspense } from 'react';
 import AsyncError from '../errorPage/AsyncError';
 import EditForm from './EditForm';

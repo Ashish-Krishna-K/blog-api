@@ -1,5 +1,5 @@
 import { useAsyncValue, Link, Outlet } from 'react-router-dom';
-import { TComment, TPost } from '../../types';
+import type { TComment, TPost } from '../../types';
 import { getFormattedDate } from '../../helperModules/helpers';
 import parse from 'html-react-parser';
 import styles from './ViewPost.module.css';
@@ -43,13 +43,16 @@ const Post = () => {
 					</article>
 				</section>
 				<hr />
-				{typeof post.comments[0] !== 'string' && (
+				{/* comment can potentially be just the commentID, so only rendering the 
+				comments section if the item is an object*/}
+				{typeof post.comments[0] === 'object' && (
 					<CommentsList
 						postId={post.id}
 						comments={post.comments as TComment[]}
 					/>
 				)}
 			</div>
+			{/* Opening delete post as a modal in the same page hence the Outlet */}
 			<Outlet />
 		</>
 	);

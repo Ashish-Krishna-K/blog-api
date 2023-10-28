@@ -1,25 +1,25 @@
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import Login from '../loginPage/Login';
-import { action as loginAction } from '../loginPage/loginAction';
+import loginAction from '../loginPage/loginAction';
 import App from '../app/App';
 import Home from '../homePage/Home';
-import { loader as homeLoader } from '../homePage/homeLoader';
-import { loader as postLoader } from '../viewPost/postLoader';
+import homeLoader from '../homePage/homeLoader';
 import ViewPost from '../viewPost/ViewPost';
+import postLoader from '../viewPost/postLoader';
 import ModalRoute from '../modalRoute/ModalRoute';
 import DeletePost from '../deletePost/DeletePost';
-import { action as deletePostAction } from '../deletePost/deletePostAction';
+import deletePostAction from '../deletePost/deletePostAction';
 import CreatePost from '../createPost/CreatePost';
-import { action as createPostAction } from '../createPost/createPostAction';
+import createPostAction from '../createPost/createPostAction';
 import EditPost from '../editPost/EditPost';
-import { action as editPostAction } from '../editPost/editPostAction';
+import editPostAction from '../editPost/editPostAction';
 import DeleteComment from '../deleteComment/DeleteComment';
-import { action as deleteCommentAction } from '../deleteComment/deleteCommentAction';
+import deleteCommentAction from '../deleteComment/deleteCommentAction';
 import Logout from '../logoutPage/LogoutPage';
-import { action as logoutAction } from '../logoutPage/logoutAction';
-import ErrorPage from '../errorPage/ErrorPage';
+import logoutAction from '../logoutPage/logoutAction';
 import FullPageSkeleton from '../skeletons/FullPageSkeleton';
-import { action as PublishPostAction } from '../publishPost/publishPostAction';
+import PublishPostAction from '../publishPost/publishPostAction';
+import ErrorPage from '../errorPage/ErrorPage';
 
 const Router = () => {
 	const router = createBrowserRouter([

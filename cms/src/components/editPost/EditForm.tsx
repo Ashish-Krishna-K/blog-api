@@ -6,8 +6,8 @@ import {
 	useNavigate,
 } from 'react-router-dom';
 import { Editor } from '@tinymce/tinymce-react';
-import { Editor as TinyMCEEditor } from 'tinymce';
-import { TPost, TPostActionData } from '../../types';
+import type { Editor as TinyMCEEditor } from 'tinymce';
+import type { TPost, TPostActionData } from '../../types';
 import parse from 'html-react-parser';
 import styles from './EditPost.module.css';
 
@@ -22,6 +22,7 @@ const EditForm = () => {
 	const titleErrors = errors?.filter((error) => error.path === 'title');
 	const textErrors = errors?.filter((error) => error.path === 'text');
 	useEffect(() => {
+		// set the title input's value to the post's title
 		if (titleRef.current) {
 			titleRef.current.value = post?.title ?? '';
 		}
@@ -60,6 +61,8 @@ const EditForm = () => {
 							import.meta.env.BASE_URL + 'tinymce/tinymce.min.js'
 						}
 						onInit={(_evt, editor) => (editorRef.current = editor)}
+						// the raw text data from API will be escaped, hence parsing it once
+						// to get the unescaped html.
 						initialValue={parse(post.text) as string}
 						textareaName="text"
 						init={{

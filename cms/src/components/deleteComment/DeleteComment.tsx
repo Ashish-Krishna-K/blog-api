@@ -1,5 +1,5 @@
 import { Form, useLocation, useNavigation } from 'react-router-dom';
-import { TComment } from '../../types';
+import type { TComment } from '../../types';
 import { getFormattedDate, closeModal } from '../../helperModules/helpers';
 import PostSkeleton from '../skeletons/PostSkeleton';
 import styles from './DeleteComment.module.css';

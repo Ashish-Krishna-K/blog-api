@@ -6,8 +6,8 @@ import {
 	useNavigate,
 } from 'react-router-dom';
 import { Editor } from '@tinymce/tinymce-react';
-import { Editor as TinyMCEEditor } from 'tinymce';
-import { TPostActionData } from '../../types';
+import type { Editor as TinyMCEEditor } from 'tinymce';
+import type { TPostActionData } from '../../types';
 import OutletSkeleton from '../skeletons/OutletSkeleton';
 import styles from './CreatePost.module.css';
 
@@ -21,6 +21,7 @@ const CreatePost = () => {
 	const titleErrors = errors?.filter((error) => error.path === 'title');
 	const textErrors = errors?.filter((error) => error.path === 'text');
 	const handleCancel = () => {
+		// go "back" in the browser
 		navigate(-1);
 	};
 	if (state !== 'idle') return <OutletSkeleton />;

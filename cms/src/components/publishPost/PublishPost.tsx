@@ -7,6 +7,7 @@ type TPublishPostProps = {
 };
 
 const PublishPost = ({ postId, isPublished }: TPublishPostProps) => {
+	// Publish post action won't cause a navigation, hence using a fetcher.
 	const fetcher = useFetcher();
 	return (
 		<fetcher.Form

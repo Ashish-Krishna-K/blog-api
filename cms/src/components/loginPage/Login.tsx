@@ -22,7 +22,8 @@ const Login = () => {
 		'errors' in actionData &&
 		typeof actionData.errors !== 'string'
 		) {
-		console.log(actionData);
+		// API returned validation errors, since it's an array filter out the appropriate
+		// errors based on field
 		emailErrors = actionData.errors.filter((err) => err.path === 'email');
 		passwordErrors = actionData.errors.filter((err) => err.path === 'password');
 	}
@@ -38,6 +39,7 @@ const Login = () => {
 			>
 				{typeof actionData !== 'undefined' &&
 					typeof actionData.errors === 'string' && (
+						// API returned credentials errors
 						<div className={styles.errorDiv}>
 							<p className="error">{actionData.errors}</p>
 						</div>

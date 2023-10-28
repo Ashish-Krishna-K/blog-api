@@ -1,46 +1,39 @@
 import { useAsyncValue, Link } from 'react-router-dom';
-import { PostsData } from '../../types';
+import type { PostsData } from '../../types';
 import { getFormattedDate } from '../../helperModules/helpers';
 import parse from 'html-react-parser';
 import styles from './PostsList.module.css';
 import PublishPost from '../publishPost/PublishPost';
 import { HashLink } from 'react-router-hash-link';
+import HomeNavLinks from '../homeNavLinks/HomeNavLinks';
 
 const PostsList = () => {
 	const data = useAsyncValue() as PostsData | undefined;
-	if (typeof data === 'undefined' || (Array.isArray(data) && data.length < 1))
+	// The API can potentially return an empty array when there is no valid search
+	// results for the query, handling such case along with potential undefined being
+	// returned
+	if (typeof data === 'undefined' || (Array.isArray(data) && data.length < 1)) {
 		return <p>There is no posts.</p>;
+	}
 	const { previousCount, nextCount, posts } = data;
+	// set the previous and next cursors
 	const previousCursor =
 		previousCount > 0 ? new Date(posts[0].createdAt).getTime() : undefined;
 	const nextCursor =
 		nextCount > 0 ? new Date(posts[4].createdAt).getTime() : undefined;
 	return (
 		<div className={styles.container}>
-			<nav className={styles.navLinks}>
-				{previousCursor && (
-					<Link
-						to={`/?f=${previousCursor}&d=prev`}
-						className={styles.prevLink}
-					>
-						Previous
-					</Link>
-				)}
-				{nextCursor && (
-					<Link
-						to={`/?f=${nextCursor}`}
-						className={styles.nextLink}
-					>
-						Next
-					</Link>
-				)}
-			</nav>
+			<HomeNavLinks
+				prevCursor={previousCursor}
+				nextCursor={nextCursor}
+			/>
 			<hr />
 			<ul className={styles.list}>
 				{posts.map((post) => (
 					<li
 						key={post.id}
 						className={`${styles.post} ${
+							// add the unpublished class if post isPublished is false
 							!post.isPublished && styles.unpublished
 						}`}
 					>
@@ -63,10 +56,14 @@ const PostsList = () => {
 							</p>
 						</div>
 						<div className={styles.text}>
+							{/* Parse the text twiced becuase the first parse will unescape the 
+							escaped HTML characters and second parse will actually render it */}
 							{parse(parse(post.text) as string)}
 						</div>
 						<div className={styles.controls}>
 							<p>
+								{/* clicking on the comments will open the post and navigate to the
+								comments section */}
 								<HashLink
 									smooth
 									to={`/post/${post.id}#comments`}
@@ -89,24 +86,10 @@ const PostsList = () => {
 				))}
 			</ul>
 			<hr />
-			<nav className={styles.navLinks}>
-				{previousCursor && (
-					<Link
-						to={`/?f=${previousCursor}&d=prev`}
-						className={styles.prevLink}
-					>
-						Previous
-					</Link>
-				)}
-				{nextCursor && (
-					<Link
-						to={`/?f=${nextCursor}`}
-						className={styles.nextLink}
-					>
-						Next
-					</Link>
-				)}
-			</nav>
+			<HomeNavLinks
+				prevCursor={previousCursor}
+				nextCursor={nextCursor}
+			/>
 		</div>
 	);
 };

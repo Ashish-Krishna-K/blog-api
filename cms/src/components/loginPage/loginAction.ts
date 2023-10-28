@@ -1,11 +1,11 @@
 import { redirect, type ActionFunction } from 'react-router-dom';
 import { saveTokenToStorage } from '../../helperModules/helpers';
 
-export const action: ActionFunction = async ({ request }) => {
+const action: ActionFunction = async ({ request }) => {
 	try {
 		const formData = Object.fromEntries(await request.formData());
-		const base = import.meta.env.VITE_API_URI as string;
-		const response = await fetch(`${base}/login`, {
+		const apiUrl = `${import.meta.env.VITE_API_URI}/login`;
+		const response = await fetch(apiUrl, {
 			method: 'POST',
 			mode: 'cors',
 			headers: {
@@ -15,8 +15,10 @@ export const action: ActionFunction = async ({ request }) => {
 		});
 		const data = (await response.json()) as unknown;
 		if (!response.ok) {
+			// Validation error
 			if (response.status === 406) return data;
 			if (response.status === 401) {
+				// credential error
 				return {
 					formData,
 					errors: (data as Record<string, string>).message,
@@ -32,3 +34,5 @@ export const action: ActionFunction = async ({ request }) => {
 		return error;
 	}
 };
+
+export default action;

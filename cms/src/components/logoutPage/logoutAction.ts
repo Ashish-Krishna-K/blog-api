@@ -19,6 +19,10 @@ const action: ActionFunction = async () => {
 		const token = loadTokenFromStorage();
 		if (!token) return redirect('/login');
 		await submitForm(token.refreshToken);
+		// the only errors thrown is when the refresh token
+		// is not valid, which is the same as logout(although
+		// the token is not removed from database) hence complete
+		// the client side logout
 		clearTokenFromStorage();
 		return redirect('/login');
 	} catch (error) {
@@ -27,4 +31,4 @@ const action: ActionFunction = async () => {
 	}
 };
 
-export { action };
+export default action;

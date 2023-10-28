@@ -1,5 +1,6 @@
 import './skeletons.css';
 
+// Skeleton loader for any page with potential posts list
 const OutletSkeleton = () => {
 	const dummy = [1, 2, 3, 4, 5];
 	return (
