@@ -3,6 +3,7 @@ import { PostsData } from '../../types';
 import { getFormattedDate } from '../../helperModules/helpers';
 import parse from 'html-react-parser';
 import styles from './PostsList.module.css';
+import PublishPost from '../publishPost/PublishPost';
 
 const PostsList = () => {
 	const data = useAsyncValue() as PostsData | undefined;
@@ -38,10 +39,13 @@ const PostsList = () => {
 				{posts.map((post) => (
 					<li
 						key={post.id}
-						className={styles.post}
+						className={`${styles.post} ${!post.isPublished && styles.unpublished}`}
 					>
 						<div>
-							<Link to={`/post/${post.id}`}>
+							<Link
+								to={`/post/${post.id}`}
+								className={styles.title}
+							>
 								<h3>{post.title}</h3>
 							</Link>
 							<p className={styles.meta}>
@@ -55,12 +59,18 @@ const PostsList = () => {
 								</em>
 							</p>
 						</div>
-						<div className={styles.text}>{parse((parse(post.text) as string))}</div>
+						<div className={styles.text}>
+							{parse(parse(post.text) as string)}
+						</div>
 						<div className={styles.controls}>
 							<p>Comments: {post.comments.length}</p>
 							<p>
 								<Link to={`/post/${post.id}/edit`}>Edit Post</Link>
 							</p>
+							<PublishPost
+								postId={post.id}
+								isPublished={post.isPublished}
+							/>
 							<p>
 								<Link to={`/post/${post.id}/delete`}>Delete Post</Link>
 							</p>

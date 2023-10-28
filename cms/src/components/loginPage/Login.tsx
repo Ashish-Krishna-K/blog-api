@@ -17,11 +17,12 @@ const Login = () => {
 	const actionData = useActionData() as ActionData;
 	let emailErrors;
 	let passwordErrors;
-
 	if (
 		typeof actionData !== 'undefined' &&
+		'errors' in actionData &&
 		typeof actionData.errors !== 'string'
-	) {
+		) {
+		console.log(actionData);
 		emailErrors = actionData.errors.filter((err) => err.path === 'email');
 		passwordErrors = actionData.errors.filter((err) => err.path === 'password');
 	}

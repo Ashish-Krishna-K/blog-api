@@ -36,12 +36,15 @@
 	color: #000;
 }
 
-.post a,
-.post a:visited {
+.unpublished {
+	background-color: var(--primary-dimmed);
+}
+
+.post .title {
 	color: var(--main-bg);
 }
 
-.post h3 {
+.title h3 {
 	margin-bottom: 0;
 }
 
@@ -72,6 +75,22 @@
 	display: flex;
 	justify-content: space-around;
 }
+
+.controls a {
+	display: block;
+  background-color: var(--main-bg);
+  color: var(--accent);
+  padding: 4px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+	text-decoration: none;
+  transition: scale 0.2s ease-in-out;
+}
+
+.controls a:hover {
+  scale:0.9
+}
+
 
 @media (max-width: 500px) {
 	.meta em {

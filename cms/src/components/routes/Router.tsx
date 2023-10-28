@@ -19,6 +19,7 @@ import Logout from '../logoutPage/LogoutPage';
 import { action as logoutAction } from '../logoutPage/logoutAction';
 import ErrorPage from '../errorPage/ErrorPage';
 import FullPageSkeleton from '../skeletons/FullPageSkeleton';
+import { action as PublishPostAction } from '../publishPost/publishPostAction';
 
 const Router = () => {
 	const router = createBrowserRouter([
@@ -61,6 +62,10 @@ const Router = () => {
 							action: deletePostAction,
 						},
 						{
+							path: 'publish',
+							action: PublishPostAction,
+						},
+						{
 							path: 'comment/:commentId/delete',
 							element: (
 								<ModalRoute>
@@ -83,6 +88,7 @@ const Router = () => {
 			path: '/login',
 			element: <Login />,
 			action: loginAction,
+			errorElement: <ErrorPage />,
 		},
 	]);
 

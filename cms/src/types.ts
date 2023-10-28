@@ -15,6 +15,7 @@ export type TPost = {
 	title: string;
 	text: string;
 	author: TAuthor;
+	isPublished: boolean;
 	comments: TComment[] | string[];
 	createdAt: string;
 	updatedAt: string;

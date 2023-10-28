@@ -4,7 +4,10 @@
 	--main-bg: rgb(61, 48, 162);
 	--main-offset: rgb(177, 94, 255);
 	--primary: rgb(255, 163, 60);
+	--primary-dimmed: rgb(255, 163, 60, 0.5);
 	--accent: rgb(255, 251, 115);
+	--unpublish: rgb(255, 0, 0, 0.5);
+	--publish: rgb(0, 255, 0, 0.5);
 }
 
 *,
@@ -29,7 +32,7 @@ body,
 	flex-direction: column;
 	width: 75%;
 	margin: 0 auto;
-  padding: 0 1vw;
+	padding: 0 1vw;
 }
 
 ul {
@@ -63,7 +66,7 @@ textarea {
 }
 
 .error {
-  color: #000;
+	color: #000;
 	font-style: italic;
 }
 

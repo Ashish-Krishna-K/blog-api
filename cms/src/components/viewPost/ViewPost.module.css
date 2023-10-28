@@ -78,6 +78,22 @@
   grid-area: 1 / 2 / 2 / 3;
 }
 
+.controls a {
+	display: block;
+  background-color: var(--main-bg);
+  color: var(--accent);
+  padding: 4px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: scale 0.2s ease-in-out;
+}
+
+.controls a:hover {
+  scale:0.9
+}
+
+
 @media (max-width: 500px) {
   .article {
     display: flex;

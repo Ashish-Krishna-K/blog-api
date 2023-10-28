@@ -3,6 +3,7 @@ import { TPost } from '../../types';
 import { getFormattedDate } from '../../helperModules/helpers';
 import parse from 'html-react-parser';
 import styles from './ViewPost.module.css';
+import PublishPost from '../publishPost/PublishPost';
 
 const Post = () => {
 	const post = useAsyncValue() as TPost | undefined;
@@ -28,6 +29,7 @@ const Post = () => {
 					</div>
 					<div className={styles.controls}>
 						<Link to={`/post/${post.id}/edit`}>Edit Post</Link>
+						<PublishPost postId={post.id} isPublished={post.isPublished} />
 						<Link to={`/post/${post.id}/delete`}>Delete Post</Link>
 					</div>
 					<div className={styles.text}>{parse(parse(post.text) as string)}</div>
