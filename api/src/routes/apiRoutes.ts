@@ -39,7 +39,7 @@ router.put('/posts/:postId', editPost);
 router.delete('/posts/:postId', deletePost);
 
 // Publish/Unpublish post
-router.put('/posts/:postId', publishPost);
+router.put('/posts/:postId/publish', publishPost);
 
 // Create new comment
 router.post('/posts/:postId/comments', createComment);
