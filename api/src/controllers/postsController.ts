@@ -161,7 +161,7 @@ export const publishPost = [
       const post = await Posts.findById(req.body.postId, 'isPublished').exec();
       if (!post) return res.status(404).json('Post not found');
       post.isPublished = !post.isPublished;
-      await post.save();
+      await post.save({ timestamps: false });
       res.sendStatus(200);
     } catch (error) {
       console.error(error);
