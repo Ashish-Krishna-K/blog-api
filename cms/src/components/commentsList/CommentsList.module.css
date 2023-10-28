@@ -1,0 +1,45 @@
+.comments {
+	margin-left: 2vw;
+}
+
+.comment {
+	margin: 1vh 1vw;
+	display: grid;
+	grid-template-columns: repeat(2, auto);
+	grid-template-rows: repeat(4, auto);
+	align-items: center;
+	border-radius: 10px;
+	padding: 1vmax;
+	background-color: var(--primary);
+	color: #000;
+}
+
+.authored p {
+  margin: 0;
+  color: var(--main-bg);
+}
+
+.deleteComment.deleteComment {
+  grid-area: 1 / 2 / 2 / 3;
+  display: block;
+  background-color: var(--main-bg);
+  color: var(--accent);
+  padding: 4px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  text-decoration: none;
+  text-align: center;
+  transition: scale 0.2s ease-in-out;
+}
+
+.deleteComment:hover {
+  scale:0.9
+}
+
+@media (max-width: 600px) {
+  .comment {
+    display: flex;
+    flex-direction: column;
+    gap: 1vh;
+  }
+}

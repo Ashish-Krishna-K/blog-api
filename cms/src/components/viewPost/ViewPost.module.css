@@ -53,22 +53,6 @@
   margin-right: 0;
 }
 
-.comments {
-  margin-left: 2vw;
-}
-
-.comment {
-  margin: 1vh 1vw;
-  display: grid;
-  grid-template-columns: repeat(2, auto);
-  grid-template-rows: repeat(4, auto);
-  align-items: center;
-  border-radius: 10px;
-  padding: 1vmax;
-  background-color: var(--primary);
-  color: #000;
-}
-
 .authored p {
   margin: 0;
   color: var(--main-bg);
@@ -93,8 +77,7 @@
   scale:0.9
 }
 
-
-@media (max-width: 500px) {
+@media (max-width: 600px) {
   .article {
     display: flex;
     flex-direction: column;
@@ -111,6 +94,10 @@
   }
   .controls {
     width: 100%;
+    display: grid;
+    align-items: center;
+    gap: 1vh;
+    text-align: center;
   }
   .comment {
     display: flex;

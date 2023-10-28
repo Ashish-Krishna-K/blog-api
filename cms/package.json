@@ -19,6 +19,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.17.0",
+    "react-router-hash-link": "^2.4.3",
     "tinymce": "^6.7.1"
   },
   "devDependencies": {
@@ -29,6 +30,7 @@
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
     "@types/react-router-dom": "^5.3.3",
+    "@types/react-router-hash-link": "^2.4.8",
     "@types/tinymce": "^4.6.7",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",

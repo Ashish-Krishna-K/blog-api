@@ -4,6 +4,7 @@ import { getFormattedDate } from '../../helperModules/helpers';
 import parse from 'html-react-parser';
 import styles from './PostsList.module.css';
 import PublishPost from '../publishPost/PublishPost';
+import { HashLink } from 'react-router-hash-link';
 
 const PostsList = () => {
 	const data = useAsyncValue() as PostsData | undefined;
@@ -39,7 +40,9 @@ const PostsList = () => {
 				{posts.map((post) => (
 					<li
 						key={post.id}
-						className={`${styles.post} ${!post.isPublished && styles.unpublished}`}
+						className={`${styles.post} ${
+							!post.isPublished && styles.unpublished
+						}`}
 					>
 						<div>
 							<Link
@@ -63,7 +66,14 @@ const PostsList = () => {
 							{parse(parse(post.text) as string)}
 						</div>
 						<div className={styles.controls}>
-							<p>Comments: {post.comments.length}</p>
+							<p>
+								<HashLink
+									smooth
+									to={`/post/${post.id}#comments`}
+								>
+									Comments: {post.comments.length}
+								</HashLink>
+							</p>
 							<p>
 								<Link to={`/post/${post.id}/edit`}>Edit Post</Link>
 							</p>

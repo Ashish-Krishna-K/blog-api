@@ -92,9 +92,12 @@
 }
 
 
-@media (max-width: 500px) {
+@media (max-width: 600px) {
 	.meta em {
 		flex-direction: column;
 		gap: 1vh;
+	}
+	.controls {
+		display: grid;
 	}
 }

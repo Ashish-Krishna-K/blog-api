@@ -3,7 +3,7 @@
   gap: 3vw;
 }
 
-@media (max-width: 310px) {
+@media (max-width: 600px) {
   nav {
     width: 100%;
   }
