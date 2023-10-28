@@ -158,7 +158,7 @@ export const publishPost = [
   authorizeAccessToken,
   async (req: Request, res: Response) => {
     try {
-      const post = await Posts.findById(req.params.postId, 'isPublished').exec();
+      const post = await Posts.findById(req.body.postId, 'isPublished').exec();
       if (!post) return res.status(404).json('Post not found');
       post.isPublished = !post.isPublished;
       await post.save();
